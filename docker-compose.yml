@@ -11,7 +11,6 @@ services:
     - "--entryPoints.web.address=:80"
     - "--entryPoints.websecure.address=:443"
     - "--certificatesResolvers.sample.acme.email=wiki@physikerwelt.de"
-    - "--certificatesResolvers.sample.acme.storage=acme.json"
     - "--certificatesResolvers.sample.acme.httpChallenge.entryPoint=web"
     ports:
       # The HTTP port
@@ -23,6 +22,7 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/acme:/etc/traefik/acme
   whoami:
     # A container that exposes an API to show its IP address
     image: containous/whoami
