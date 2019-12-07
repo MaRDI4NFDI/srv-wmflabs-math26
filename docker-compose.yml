@@ -12,6 +12,7 @@ services:
     - "--entryPoints.web.address=:80"
     - "--entryPoints.websecure.address=:443"
     - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
+    - "--certificatesresolvers.mytlschallenge.acme.httpchallenge.entrypoint=web"
    #- "--certificatesresolvers.mytlschallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
     - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
     - "--certificatesResolvers.mytlschallenge.acme.email=wiki@physikerwelt.de"
