@@ -31,7 +31,11 @@ services:
     # A container that exposes an API to show its IP address
     image: containous/whoami
     labels:
+      - "traefik.http.routers.whoami8.rule=Host(`beta.math.wmflabs.org`)"
+      - "traefik.http.routers.whoami8.entrypoints=web"
+      - "traefik.http.routers.whoami8.middlewares=redirect"
       - "traefik.http.routers.whoami.rule=Host(`beta.math.wmflabs.org`)"
       - "traefik.http.routers.whoami.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.middlewares.redirect.redirectscheme.scheme=websecure"
         
