@@ -1,0 +1,51 @@
+ #- "--log.level=DEBUG"
+api:
+  dashboard: true
+
+http:
+  routers:
+    api:
+      rule: Host(`traefik.beta.math.wmflabs.org`)
+      service: api@internal
+      middlewares:
+        - auth
+    whoami:
+      rule: Host(`beta.math.wmflabs.org`)
+      middlewares:
+        - redirect
+      entrypoints:
+        - web
+     whoamis:
+      rule: Host(`beta.math.wmflabs.org`)
+      service: whoami
+      entrypoints:
+        - web-secure
+      tls:
+        certResolver: mytlschallenge
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+          - "math:***REMOVED***" #pw ***REMOVED***
+      redirect:
+        redirectScheme:
+          scheme: https       
+
+providers:
+  docker:
+    defaultRule: "Host(`{{ .Name }}.beta.math.wmflabs.org`)"
+    
+entryPoints:
+  web:
+    address: ":80"
+  web-secure:
+    address: ":443"
+
+certificatesResolvers:
+  mytlschallenge:
+    acme:
+      tlschallenge: true
+      entrypoint: web
+      storage: /letsencrypt/acme.json
+      email: wiki@physikerwelt.de
+
