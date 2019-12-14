@@ -13,7 +13,7 @@ http:
       rule: Host(`beta.math.wmflabs.org`)
       middlewares:
         - redirect
-      entrypoints:
+      entryPoints:
         - web
      whoamis:
       rule: Host(`beta.math.wmflabs.org`)
