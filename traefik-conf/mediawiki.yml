@@ -1,0 +1,11 @@
+http:
+  routers:
+    mediawiki:
+    {{$languages := list "en" "de"}}
+    {{$hosts := join ".beta.math.wmflabs.org`) || Host(`" $languages}}
+      rule: ( Host(`{{$hosts}}.beta.math.wmflabs.org`) )
+      service: mediawiki-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
