@@ -2,20 +2,7 @@ version: '3'
 
 services:
   reverse-proxy:
-    # The official v2.0 Traefik docker image
-    image: traefik:v2.0
-    # Enables the web UI and tells Traefik to listen to docker
-    command:
-   #- "--log.level=DEBUG"
-    - "--api.insecure=true"
-    - "--providers.docker=true"
-    - "--entryPoints.web.address=:80"
-    - "--entryPoints.websecure.address=:443"
-    - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
-    - "--certificatesresolvers.mytlschallenge.acme.httpchallenge.entrypoint=web"
-   #- "--certificatesresolvers.mytlschallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-    - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
-    - "--certificatesResolvers.mytlschallenge.acme.email=wiki@physikerwelt.de"
+    image: traefik
     ports:
       # The HTTP port
       - "80:80"
@@ -28,21 +15,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - "./letsencrypt:/letsencrypt"
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik-conf:/traefik-conf:ro
   whoami:
     # A container that exposes an API to show its IP address
     image: containous/whoami
-    labels:
-      - "traefik.http.routers.whoami8.rule=Host(`beta.math.wmflabs.org`)"
-      - "traefik.http.routers.whoami8.entrypoints=web"
-      - "traefik.http.routers.whoami8.middlewares=redirect"
-      - "traefik.http.routers.whoami.rule=Host(`beta.math.wmflabs.org`)"
-      - "traefik.http.routers.whoami.tls.certresolver=mytlschallenge"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
   mathoid:
     container_name: mathoid
     image: physikerwelt/mathoid:latest
     ports:
       - 10042:10042
     restart: always
+    labels:
+      - traefik.http.routers.mathoid.rule=Host(`mathoid.beta.math.wmflabs.org`)
+      - traefik.http.routers.mathoid.tls=true
+      - traefik.http.routers.mathoid.tls.certresolver=le
         

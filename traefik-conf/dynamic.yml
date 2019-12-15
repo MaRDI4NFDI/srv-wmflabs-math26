@@ -1,0 +1,46 @@
+http:
+  routers:
+    api:
+      rule: Host(`traefik.beta.math.wmflabs.org`)
+      service: api@internal
+      middlewares:
+        - auth
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: le
+    whoami-80:
+      rule: HostRegexp(`{host:.+}`)
+      service: whoami-beta@docker
+      middlewares:
+        - redirect
+      entryPoints:
+        - web
+      priority: 100
+    whoami-443:
+      rule: Host(`whoami.beta.math.wmflabs.org`)
+      service: whoami-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
+    home:
+      rule: Host(`home.beta.math.wmflabs.org`)
+      service: whoami-beta@docker
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares:
+        - test-redirectregex
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+          - "math:***REMOVED***" #pw ***REMOVED***
+    redirect:
+      redirectScheme:
+        scheme: https
+    test-redirectregex:
+      redirectRegex:
+        regex: "^https://home.beta.math.wmflabs.org/(.*)"
+        replacement: "https://wikitech.wikimedia.org/wiki/Nova_Resource:Math"
