@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 services:
   reverse-proxy:
@@ -29,4 +29,21 @@ services:
       - traefik.http.routers.mathoid.rule=Host(`mathoid.beta.math.wmflabs.org`)
       - traefik.http.routers.mathoid.tls=true
       - traefik.http.routers.mathoid.tls.certresolver=le
-        
+  database:
+    container_name: db
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    volumes:
+      - mw-database:/var/lib/mysql
+      - ./dumps:/docker-entrypoint-initdb.d
+    secrets:
+      - db_root_password
+    labels:
+      - "traefik.enable=false"
+secrets:
+   db_root_password:
+     file: secret/db_root_password.txt
+volumes:
+  mw-images:
+  mw-database:
