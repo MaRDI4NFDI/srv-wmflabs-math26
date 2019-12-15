@@ -24,6 +24,17 @@ http:
        - websecure
       tls:
         certResolver: le
+{{$services := list "mathoid" "whoami"}}
+{{range $s := $services}}
+  routers:
+    whoami{{$s}}:
+      rule: Host(`service-{{$s}}.beta.math.wmflabs.org`)
+      service: {{$s}}-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
+{{end}}
     home:
       rule: Host(`home.beta.math.wmflabs.org`)
       service: whoami-beta@docker
