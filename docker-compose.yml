@@ -45,6 +45,8 @@ services:
     container_name: mw
     image: physikerwelt/mediawiki:latest
     restart: always
+    volumes:
+    - ./container-scripts/mw:/var/www/html/scripts:ro
     ports:
       - 8080:80
     links:
