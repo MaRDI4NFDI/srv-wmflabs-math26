@@ -43,7 +43,7 @@ services:
       - "traefik.enable=false"
   mediawiki:
     container_name: mw
-    image: physikerwelt/mediawiki:20191214-1
+    image: physikerwelt/mediawiki:latest
     restart: always
     ports:
       - 8080:80
