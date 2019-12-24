@@ -15,6 +15,7 @@ if [ -f /var/www/html/LocalSettings.php.docker.tmp ]
 then
     mv /var/www/html/LocalSettings.php.docker.tmp /var/www/html/LocalSettings.php
 fi
-
+export SERVER_NAME=$1.beta.physikerwelt.de
+echo "Updating $SERVER_NAME"
 # Run update.php too
-php /var/www/html/maintenance/update.php --wiki wiki_$1 --quick
+php /var/www/html/maintenance/update.php --quick
