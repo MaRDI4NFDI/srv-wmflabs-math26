@@ -47,6 +47,7 @@ services:
     restart: always
     volumes:
     - ./container-scripts/mw:/var/www/html/scripts:ro
+    - ./mwd/mediawiki/LocalSettings.php:/var/www/html/LocalSettings.default.php
     ports:
       - 8080:80
     links:
