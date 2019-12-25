@@ -14,7 +14,7 @@ http:
         certResolver: le
 {{end}}
 {{range $i, $g := $groups}}
-    wiki-{{$i}}:
+    wiki-wmf-{{$i}}:
     {{$languages := split $g ","}}
      {{$hosts := join ".beta.math.wmflabs.org`,`" $languages}}
       rule: Host(`{{$hosts}}.beta.math.wmflabs.org`)
