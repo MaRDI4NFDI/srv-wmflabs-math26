@@ -5,7 +5,7 @@ http:
 {{range $i, $g := $groups}}
     wiki-{{$i}}:
     {{$languages := split $g ","}}
-     {{$hosts := join ".beta.physikerwelt.de`) || Host(`" $languages}}
+     {{$hosts := join ".beta.physikerwelt.de`,`" $languages}}
       rule: Host(`{{$hosts}}.beta.physikerwelt.de`)
       service: mediawiki-beta@docker
       entryPoints:
