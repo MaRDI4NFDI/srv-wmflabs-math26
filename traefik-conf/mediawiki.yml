@@ -13,3 +13,14 @@ http:
       tls:
         certResolver: le
 {{end}}
+{{range $i, $g := $groups}}
+    wiki-{{$i}}:
+    {{$languages := split $g ","}}
+     {{$hosts := join ".beta.math.wmflabs.org`,`" $languages}}
+      rule: Host(`{{$hosts}}.beta.math.wmflabs.org`)
+      service: mediawiki-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
+{{end}}
