@@ -1,0 +1,8 @@
+#!/bin/bash
+MYSQL_ROOT_PASSWORD=`cat secret/db_root_password.txt`
+TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`
+FILENAME=/data/project/backup/mathqid/allMathqId-$TIMESTAMP.sql.gz
+echo "Starting backup to $FILENAME"
+sudo docker exec db sh -c "exec mysqldump --all-databases -uroot -p$MYSQL_ROOT_PASSWORD | gzip" > $FILENAME
+sudo chown physikerwelt $FILENAME
+echo "Backup done"
