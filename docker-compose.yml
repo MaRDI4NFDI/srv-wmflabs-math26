@@ -47,8 +47,7 @@ services:
     restart: always
     volumes:
     - ./container-scripts/mw:/var/www/html/scripts:ro
-    - ./mwd/mediawiki/LocalSettings.php:/var/www/html/LocalSettings_org.php:ro
-    - ./mwd/core/languages/LanguageConverter.php:/var/www/html/languages/LanguageConverter.php:ro
+    - ./mwd/mediawiki/LocalSettings.php:/var/www/html/LocalSettings.php:ro
     - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
     ports:
       - 8080:80
