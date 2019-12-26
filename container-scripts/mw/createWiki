@@ -18,6 +18,6 @@ fi
 export SERVER_NAME=$1.beta.physikerwelt.de
 echo "Updating $SERVER_NAME"
 # Run update.php too
-php /var/www/html/maintenance/update.php --quick
-# bzcat math-qid/$1.xml.bz2 | php /var/www/html/maintenance/importDump.php
-# php /var/www/html/maintenance/initSiteStats.php
+#php /var/www/html/maintenance/update.php --quick
+#bzcat math-qid/$1.xml.bz2 | php /var/www/html/maintenance/importDump.php
+#php /var/www/html/maintenance/initSiteStats.php
