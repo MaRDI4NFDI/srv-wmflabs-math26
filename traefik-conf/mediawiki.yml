@@ -24,3 +24,10 @@ http:
       tls:
         certResolver: le
 {{end}}
+    wiki-mardi:
+      rule: Host(`mardi.beta.math.wmflabs.org`)
+      service: mediawiki-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
