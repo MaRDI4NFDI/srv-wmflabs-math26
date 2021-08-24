@@ -48,6 +48,7 @@ services:
     volumes:
     - ./container-scripts/mw:/var/www/html/scripts:ro
     - ./mwd/mediawiki/extensions/Math:/var/www/html/extensions/Math:ro
+    - ./LocalSettings.d:/var/www/html/LocalSettings.d:ro
     - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
     ports:
       - 8080:80
