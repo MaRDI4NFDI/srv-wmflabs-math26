@@ -43,7 +43,7 @@ services:
       - "traefik.enable=false"
   mediawiki:
     container_name: mw
-    image: physikerwelt/mediawiki:latest
+    image: ghcr.io/physikerwelt/mediawiki-docker:master
     restart: always
     volumes:
     - ./container-scripts/mw:/var/www/html/scripts:ro
