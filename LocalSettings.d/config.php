@@ -17,6 +17,6 @@ if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv
 	$wgWBClientSettings['repoUrl'] = 'https://mardi.beta.math.wmflabs.org';
 	$wgWBClientSettings['repoScriptPath'] = '';
 	$wgWBClientSettings['repoArticlePath'] = '/wiki/$1';
-	$wgWBClientSettings['repositories']['']['repoDatabase'] = 'wiki_mardí';
-	$wgWBClientSettings['repositories']['']['changesDatabase'] = 'wiki_mardí';
+	$wgWBClientSettings['repositories']['']['repoDatabase'] = 'wiki_mardi';
+	$wgWBClientSettings['repositories']['']['changesDatabase'] = 'wiki_mardi';
 }
