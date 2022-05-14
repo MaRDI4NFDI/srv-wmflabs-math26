@@ -474,7 +474,7 @@ if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv
 			break;
 	}
 }
-foreach ( glob( "/var/www/html/LocalSettings.d/*.php" ) as $filename ) {
+foreach ( glob( "/shared/LocalSettings.d/*.php" ) as $filename ) {
 	/** @noinspection PhpIncludeInspection */
 	require_once $filename;
 }
