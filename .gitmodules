@@ -1,3 +1,0 @@
-[submodule "mwd"]
-	path = mwd
-	url = git@github.com:physikerwelt/mediawiki-docker.git

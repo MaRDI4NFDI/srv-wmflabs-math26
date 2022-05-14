@@ -13,7 +13,7 @@ docker-compose
 
 This directory is checked out as follows
 ```
-physikerwelt@math19:~$ git clone git@github.com:ag-gipp/srv-math19.git --recursive
+physikerwelt@math19:~$ git clone git@github.com:ag-gipp/srv-math19.git
 physikerwelt@math19:~/srv-math19$ sudo docker-compose up -d
 ```
 Updates are handled manually.
