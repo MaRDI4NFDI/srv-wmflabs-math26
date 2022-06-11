@@ -43,7 +43,7 @@ services:
       - "traefik.enable=false"
   mediawiki:
     container_name: mw
-    image: ghcr.io/mardi4nfdi/docker-wikibase
+    image: ghcr.io/mardi4nfdi/docker-wikibase:main
     restart: always
     volumes:
     - ./container-scripts/mw:/var/www/html/scripts:ro
