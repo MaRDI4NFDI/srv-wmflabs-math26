@@ -26,7 +26,6 @@ http:
         certResolver: le
 {{$services := list "mathoid" "whoami"}}
 {{range $s := $services}}
-  routers:
     whoami{{$s}}:
       rule: Host(`service-{{$s}}.beta.math.wmflabs.org`)
       service: {{$s}}-beta@docker
