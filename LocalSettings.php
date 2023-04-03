@@ -175,6 +175,7 @@ if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv
 	$wgDisableLangConversion = true;
 	$wgEnableWikibaseRepo = true;
 	$wgEnableWikibaseClient = true;
+	$wgMathValidModes[] = 'native';
 	require_once "$IP/extensions/Wikibase/repo/Wikibase.php";
 	require_once "$IP/extensions/Wikibase/repo/ExampleSettings.php";
 	require_once "$IP/extensions/Wikibase/client/WikibaseClient.php";
