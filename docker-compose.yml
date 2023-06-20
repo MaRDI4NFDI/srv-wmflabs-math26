@@ -22,11 +22,10 @@ services:
   mathoid:
     container_name: mathoid
     image: docker-registry.wikimedia.org/wikimedia/mediawiki-services-mathoid:2023-05-13-192519-production
-    ports:
-      - 10042:10042
     restart: always
     labels:
       - traefik.http.routers.mathoid.rule=Host(`mathoid.beta.math.wmflabs.org`)
+      - traefik.http.services.mathoid.loadbalancer.server.port=10044
       - traefik.http.routers.mathoid.tls=true
       - traefik.http.routers.mathoid.tls.certresolver=le
   database:
