@@ -176,10 +176,12 @@ if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv
 	$wgEnableWikibaseRepo = true;
 	$wgEnableWikibaseClient = true;
 	$wgMathValidModes[] = 'native';
-	require_once "$IP/extensions/Wikibase/repo/Wikibase.php";
-	require_once "$IP/extensions/Wikibase/repo/ExampleSettings.php";
-	require_once "$IP/extensions/Wikibase/client/WikibaseClient.php";
-	require_once "$IP/extensions/Wikibase/client/ExampleSettings.php";
+	// only temp 
+        //$wgGroupPermissions['*']['createaccount'] = true; 
+	//require_once "$IP/extensions/Wikibase/repo/Wikibase.php";
+	//require_once "$IP/extensions/Wikibase/repo/ExampleSettings.php";
+	//require_once "$IP/extensions/Wikibase/client/WikibaseClient.php";
+	//require_once "$IP/extensions/Wikibase/client/ExampleSettings.php";
 	// $wgWBRepoSettings['siteLinkGroups'] = [ 'wikipedia', 'drmfgroup' ];
 	//$wgWBClientSettings['siteGlobalID'] = $match[1];
 } else {
