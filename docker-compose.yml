@@ -21,7 +21,7 @@ services:
     image: containous/whoami
   mathoid:
     container_name: mathoid
-    image: physikerwelt/mathoid:latest
+    image: docker-registry.wikimedia.org/wikimedia/mediawiki-services-mathoid:2023-05-13-192519-production
     ports:
       - 10042:10042
     restart: always
