@@ -349,17 +349,15 @@ if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv
 
 				return true;
 			}
-
+		
 			$smwgNamespacesWithSemanticLinks[NS_FORMULA] = true;
 			$smwgNamespacesWithSemanticLinks[NS_CD] = true;
 			$wgFlaggedRevsStatsAge = false;
 			$wgGroupPermissions['sysop']['review'] = true; #allow administrators to review revisions
 			wfLoadExtension( 'MathSearch' );
-			$wgEnableWikibaseRepo = true;
-			$wgEnableWikibaseClient = true;
-			require_once "$IP/extensions/Wikibase/repo/Wikibase.php";
+			wfLoadExtension( 'WikibaseRepository', "$IP/extensions/Wikibase/extension-repo.json" );
 			require_once "$IP/extensions/Wikibase/repo/ExampleSettings.php";
-			require_once "$IP/extensions/Wikibase/client/WikibaseClient.php";
+			wfLoadExtension( 'WikibaseClient', "$IP/extensions/Wikibase/extension-client.json" );
 			require_once "$IP/extensions/Wikibase/client/ExampleSettings.php";
 			$wgWBRepoSettings['siteLinkGroups'] = [ 'wikipedia', 'drmfgroup' ];
 			$wgWBClientSettings['siteGlobalID'] = 'drmf';
@@ -370,6 +368,8 @@ if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv
 			wfLoadExtension( 'OAuth' );
 			$wgGroupPermissions['sysop']['mwoauthproposeconsumer'] = true;
 			wfLoadExtension( 'DataTransfer' );
+			$wgShowExceptionDetails = true;
+			$wgMathoidCli = false;
 			break;
 		case 'enfse':
 			$wgServer = 'https://en.formulasearchengine.com';
