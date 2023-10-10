@@ -21,7 +21,7 @@ services:
     image: containous/whoami
   mathoid:
     container_name: mathoid
-    image: docker-registry.wikimedia.org/wikimedia/mediawiki-services-mathoid:2023-05-13-192519-production
+    image: docker-registry.wikimedia.org/repos/mediawiki/services/mathoid
     restart: always
     labels:
       - traefik.http.routers.mathoid.rule=Host(`mathoid.beta.math.wmflabs.org`)
