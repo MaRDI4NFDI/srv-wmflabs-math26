@@ -18,13 +18,21 @@ physikerwelt@math19:~/srv-math19$ sudo docker-compose up -d
 ```
 Updates are handled manually.
 
-
+Add user to docker group
+```
+physikerwelt@math24:~/srv-math24$ sudo groupadd docker
+groupadd: group 'docker' already exists
+physikerwelt@math24:~/srv-math24$ sudo usermod -aG docker $USER
+physikerwelt@math24:~/srv-math24$ newgrp docker
+physikerwelt@math24:~/srv-math24$ docker run hello-world
+YEAH
+````
 ## Setup mediawiki by script
 
 
 ## Connect to mysql
 ```bash
-physikerwelt@math19:~/srv-mathosphere$ sudo docker exec -it db /bin/bash
+physikerwelt@math19:~/srv-mathosphere$ docker exec -it db /bin/bash
 root@535c789ac1e0:/# MYSQL_ROOT_PASSWORD=`cat /run/secrets/db_root_password`
 root@535c789ac1e0:/# mysql -p$MYSQL_ROOT_PASSWORD
 ```
