@@ -27,7 +27,6 @@ physikerwelt@math24:~/srv-math24$ newgrp docker
 physikerwelt@math24:~/srv-math24$ docker run hello-world
 YEAH
 ````
-## Setup mediawiki by script
 
 
 ## Connect to mysql
@@ -41,3 +40,7 @@ CREATE USER 'wiki'@'%' IDENTIFIED BY '***REMOVED***';
 GRANT ALL PRIVILEGES ON  `wiki\_%` . * TO  'wiki'@'%';
 
 ```
+
+## Setup mediawiki by script
+```
+docker exec -it mw /bin/bash
