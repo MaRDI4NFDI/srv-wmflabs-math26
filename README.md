@@ -44,3 +44,4 @@ GRANT ALL PRIVILEGES ON  `wiki\_%` . * TO  'wiki'@'%';
 ## Setup mediawiki by script
 ```
 docker exec -it mw /bin/bash
+root@c1eabacc8e54:/var/www/html# ./scripts/createAllWikis.sh 
