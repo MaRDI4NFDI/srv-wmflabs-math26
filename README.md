@@ -27,7 +27,14 @@ physikerwelt@math24:~/srv-math24$ newgrp docker
 physikerwelt@math24:~/srv-math24$ docker run hello-world
 YEAH
 ````
+## Configure git
 
+physikerwelt@math24:~$ git config --list
+physikerwelt@math24:~$ git config --global user.name "Moritz Schubotz (physikerwelt)"
+git config --global user.email wiki@physikerwelt.de
+physikerwelt@math24:~$ git config --list
+user.name=Moritz Schubotz (physikerwelt)
+user.email=wiki@physikerwelt.de
 
 ## Connect to mysql
 ```bash
