@@ -63,7 +63,7 @@ services:
     - ./LocalSettings.d:/shared/LocalSettings.d:ro
     - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
     ports:
-      - 8080:80
+      - 8081:80
     links:
       - database
 secrets:
