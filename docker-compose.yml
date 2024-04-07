@@ -53,6 +53,19 @@ services:
       - 8080:80
     links:
       - database
+  mediawiki-dev:
+    container_name: dev
+    image: ghcr.io/mardi4nfdi/docker-wikibase:dev
+    restart: on-failure
+    volumes:
+    - ./container-scripts/mw:/var/www/html/scripts:ro
+    - ./LocalSettings.php:/shared/LocalSettings.php:ro
+    - ./LocalSettings.d:/shared/LocalSettings.d:ro
+    - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
+    ports:
+      - 8080:80
+    links:
+      - database
 secrets:
    db_root_password:
      file: secret/db_root_password.txt
