@@ -35,6 +35,7 @@ git config --global user.email wiki@physikerwelt.de
 physikerwelt@math24:~$ git config --list
 user.name=Moritz Schubotz (physikerwelt)
 user.email=wiki@physikerwelt.de
+```
 
 ## Connect to mysql
 ```bash
