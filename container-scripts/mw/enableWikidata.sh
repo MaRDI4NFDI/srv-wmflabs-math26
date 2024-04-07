@@ -3,6 +3,5 @@ do
 	echo "processing language $lang"
 	export SERVER_NAME=$lang.beta.physikerwelt.de
 	./maintenance/update.php --quick
-	./maintenance/run  ./extensions/Wikibase/repo/maintenance/rebuildItemsPerSite.php
 	./maintenance/run ./maintenance/populateInterwiki.php
 done
