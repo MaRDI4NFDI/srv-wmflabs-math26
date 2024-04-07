@@ -2,7 +2,7 @@ for lang in en ceb sv de fr nl ru it es pl war vi ja zh pt ar uk fa sr ca no id 
 do
 	echo "processing language $lang"
 	export SERVER_NAME=$lang.beta.physikerwelt.de
-    ./maintenance/update.php --quick
-    php ./extensions/Wikibase/repo/maintenance/rebuildItemsPerSite.php
-    php ./extensions/Wikibase/client/maintenance/populateInterwiki.php
+	./maintenance/update.php --quick
+	./maintenance/run  ./extensions/Wikibase/repo/maintenance/rebuildItemsPerSite.php
+	./maintenance/run ./maintenance/populateInterwiki.php
 done
