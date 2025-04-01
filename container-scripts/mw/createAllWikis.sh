@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default directory if no argument is provided
-DEFAULT_DIR="/data/project/wdump/links/latest/"
+DEFAULT_DIR="/data/project/wdump/math"
 
 # Use the provided directory or fallback to default
 DIR="${1:-$DEFAULT_DIR}"
