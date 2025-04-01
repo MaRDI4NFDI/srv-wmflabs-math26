@@ -1,6 +1,6 @@
 #!/bin/sh
 filename="${1##*/}"
-language_codes=$(<./language_codes.csv)
+language_codes=$(<./lanaguage_codes.csv)
 
 echo "$language_codes"
 
