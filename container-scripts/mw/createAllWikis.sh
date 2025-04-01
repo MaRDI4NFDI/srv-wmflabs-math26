@@ -15,6 +15,6 @@ fi
 # Loop through all files in the specified directory
 for lang in "$DIR"/*; do
 	echo "processing wiki $lang"
- 	filename="${fullfile##*/}" 
+ 	filename="${lang##*/}" 
 	./createWiki $lang 2>&1 > "$DIR"/log/$filename.log || echo "Error importing $lang"
 done
