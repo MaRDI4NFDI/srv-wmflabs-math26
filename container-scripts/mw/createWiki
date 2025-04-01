@@ -13,7 +13,7 @@ is_valid_language_code() {
 }
 
 # Use a regular expression to extract the language code or identifier and suffix
-if [[ "$filename" =~ ^([a-zA-Z0-9]+)wiki([a-zA-Z0-9]*)\.xml\.bz$ ]]; then
+if [[ "$filename" =~ ^([a-zA-Z0-9]+)wik([a-zA-Z0-9]*)\.xml\.bz$ ]]; then
   language="${BASH_REMATCH[1]}"  # The language part (before 'wiki')
   suffix="${BASH_REMATCH[2]}"    # The suffix after 'wiki'
 
