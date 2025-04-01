@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 filename="${1##*/}"
 language_codes=$(<lanaguage_codes.csv)
 
