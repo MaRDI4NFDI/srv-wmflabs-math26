@@ -1,5 +1,9 @@
 #!/bin/sh
 
+echo "Script called with $1"
+
+exit 1
+
 # Hide the current LocalSettings.php if it exists
 if [ -f /var/www/html/LocalSettings.php ]
 then
