@@ -1,11 +1,37 @@
 #!/bin/bash
 filename="${1##*/}"
-language_codes=$(<lanaguage_codes.csv)
+valid_language_codes=$(<lanaguage_codes.csv)
+# Function to check if a language code is valid
+is_valid_language_code() {
+  local lang_code="$1"
+  for valid_code in "${valid_language_codes[@]}"; do
+    if [[ "$valid_code" == "$lang_code" ]]; then
+      return 0  # Valid code found, return success
+    fi
+  done
+  return 1  # No valid code found, return failure
+}
 
-echo "$language_codes"
+# Use a regular expression to extract the language code or identifier and suffix
+if [[ "$filename" =~ ^([a-zA-Z0-9]+)wiki([a-zA-Z0-9]*)\.xml\.bz$ ]]; then
+  language="${BASH_REMATCH[1]}"  # The language part (before 'wiki')
+  suffix="${BASH_REMATCH[2]}"    # The suffix after 'wiki'
 
+  # Check if the language is valid, otherwise default to "en"
+  if ! is_valid_language_code "$language"; then
+    echo "Invalid language code '$language', defaulting to 'en'."
+    language="en"
+  fi
 
-echo "$filename"
+  # Output the result
+  echo "Language: $language"
+  if [ -n "$suffix" ]; then
+    echo "Suffix: $suffix"
+  fi
+else
+  echo "Invalid filename format."
+  exit 1
+fi
  	
 
 exit 0
