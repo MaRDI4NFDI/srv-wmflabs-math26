@@ -15,5 +15,5 @@ fi
 # Loop through all files in the specified directory
 for lang in "$DIR"/*; do
 	echo "processing wiki $lang"
-	./createWiki $lang 2>&1 > $lang.log || echo "Error importing $lang"
+	./createWiki $lang 2>&1 > "$DIR"/log/$lang.log || echo "Error importing $lang"
 done
