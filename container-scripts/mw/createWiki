@@ -1,6 +1,7 @@
 #!/bin/bash
 filename="${1##*/}"
 valid_language_codes=$(<lanaguage_codes.csv)
+echo $valid_language_codes;
 # Function to check if a language code is valid
 is_valid_language_code() {
   local lang_code="$1 "
