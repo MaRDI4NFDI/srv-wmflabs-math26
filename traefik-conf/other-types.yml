@@ -1,0 +1,23 @@
+http:
+  routers:
+# work around letsencrypts` limits (max 50 certs, max 100 domains per cert)
+{{$groupsm := dict "grp10" "ae,az,br,de-labs,en-labs,flaggedrevs-labs,ge,id,liquidthreads-labs,pl,readerfeedback-labs,ru,ua,uk"}}
+{{$groupsn := dict "grp11" "ar,cs,de,el,en,es,fa,fi,fr,he,hu,it,ja,ko,pl,pt,ro,ru,shn,sr,ta,tr,uk,zh"}}
+{{$groupsq := dict "grp12" "ar,as,az,bg,bjn,br,ca,cy,da,de,el,en,eo,es,fa,fr,gl,gu,he,hi,hu,it,ja,ka,ko,no,pl,pt,ru,simple,sl,sr,su,ta,th,tl,tr,uk,uz,vi,zh"}}
+{{$groupss := dict "grp13" "ar,as,az,be,bg,bn,br,ca,cs,cy,da,de,el,en,eo,es,et,eu,fa,fi,fr,gl,gu,he,hi,hr,hu,hy,id,it,ja,jv,ka,kn,ko,la,lij,mk,ml,mr,ms,nap,nl,no,pa,pl,pt,ro,ru"
+"grp14" "sa,sl,sr,su,sv,ta,tcy,te,th,tr,uk,vec,vi,zh,zh-min-nan"}}
+{{$groupsv := dict "grp15" "ar,beta,cs,de,el,en,es,fr,hi,it,ja,ko,pt,ru,sl,sv,zh"}}
+{{$groupsy := dict "grp16" "bn,cs,de,en,eo,es,fa,fr,he,hi,id,it,ja,nl,pt,ru,shn,tr,uk,vi,zh"}}
+{{$groupst := dict "grp17" "af,ar,az,bg,bn,br,bs,ca,cs,cy,da,de,el,en,eo,es,et,fa,fi,fr,gd,gl,gom,he,hi,hif,hu,hy,id,ie,is,it,ja,ka,kaa,kk,km,kn,ko,ku,lmo,lt,mg,mk,ml,mn,mnw,mr,ms"
+"grp18" "nds,nl,no,oc,pl,pt,ro,ru,sd,sg,si,simple,skr,sq,sr,sv,ta,te,th,tl,tr,uk,uz,vec,vi,wa,yue,zh"}}
+{{range $i, $g := $groupsm}}
+    wikim-wmf-{{$i}}:
+    {{$languages := split $g ","}}
+     {{$hosts := join ".wikimedia.beta.math.wmflabs.org`,`" $languages}}
+      rule: Host(`{{$hosts}}.wikimedia.beta.math.wmflabs.org`)
+      service: mediawiki-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
+{{end}}
