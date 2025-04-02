@@ -1,7 +1,8 @@
 http:
   routers:
 # work around letsencrypts` limits (max 50 certs, max 100 domains per cert)
-{{$groupsb := dict "grp8" "af,ang,ar,az,ba,be,bg,bn,ca,cs,da,de,el,en,eo,es,et,eu,fa,fi,fr,gl,he,hi,hr,hu,hy,id,is,it,ja,ka,km,ko,ku,la,lt,lv,mk,ml,ms,ne,nl,no,oc,pa,pl,pt,ro"}}
+{{$groupsb := dict "grp8" "af,ang,ar,az,ba,be,bg,bn,ca,cs,da,de,el,en,eo,es,et,eu,fa,fi,fr,gl,he,hi,hr,hu,hy,id,is,it,ja,ka,km,ko,ku,la,lt,lv,mk,ml,ms,ne,nl,no,oc,pa,pl,pt,ro"
+"grp9" "ru,shn,si,simple,sk,sl,sq,sr,sv,ta,te,tg,th,tl,tr,tt,uk,ur,vi,zh,zh-min-nan"}}
 {{range $i, $g := $groupsb}}
     wikibooks-{{$i}}:
     {{$languages := split $g ","}}
