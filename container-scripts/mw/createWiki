@@ -6,7 +6,9 @@ valid_language_codes="${valid_language_codes//$'\n'/ }"
 is_valid_language_code() {
   local lang_code="$1 "
   for valid_code in "${valid_language_codes[@]}"; do
-    if [[ "${valid_code//[$' \t\n\r']/}" == "$lang_code" ]]; then
+    valid_code="${valid_code//[$' \t\n\r']/}"
+    echo $valid_code
+    if [[ "$valid_code}" == "$lang_code" ]]; then
       return 0  # Valid code found, return success
     fi
   done
