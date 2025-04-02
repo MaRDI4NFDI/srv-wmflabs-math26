@@ -24,10 +24,10 @@ services:
     image: docker-registry.wikimedia.org/repos/mediawiki/services/mathoid:latest
     restart: always
     labels:
-      - traefik.http.routers.mathoid.rule=Host(`mathoid.beta.math.wmflabs.org`)
-      - traefik.http.services.mathoid.loadbalancer.server.port=10044
-      - traefik.http.routers.mathoid.tls=true
-      - traefik.http.routers.mathoid.tls.certresolver=le
+      - traefik.http.routers.mathoid-beta.rule=Host(`mathoid.beta.math.wmflabs.org`)
+      - traefik.http.services.mathoid-beta.loadbalancer.server.port=10044
+      - traefik.http.routers.mathoid-beta.tls=true
+      - traefik.http.routers.mathoid-beta.tls.certresolver=le
   database:
     container_name: db
     image: mariadb:10.8.2 #See https://stackoverflow.com/a/72417962
