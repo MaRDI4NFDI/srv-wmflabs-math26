@@ -1,7 +1,13 @@
 http:
   routers:
 # work around letsencrypts` limits (max 50 certs, max 100 domains per cert)
-{{$groups := dict "grp1" "en,ceb,sv,de,fr,nl,ru,it,es,pl,war,vi,ja,zh,pt,ar,uk,fa,sr,ca,no,id,ko,fi,hu,sh,cs,ro,eu,tr,ms,eo,hy,bg,da,he,ce,sk,zh-min-nan,kk,min,hr,et,lt,be,el,sl,gl,azb,nn,az,simple,ur,th,hi,ka,uz,la,ta,vo,cy,mk,ast,tg,lv,mg,tt,oc,af,bs,ky,sq,tl,zh-yue,bn,new,te,be-x-old,br,ml,pms,su,lb,ht,jv,nds,sco,mr,sw,ga" "grp2" "ba,is,pnb,my,fy,cv,lmo,an,ne,yo,pa,bar,io,gu,als,ku,scn,bpy,kn,ckb,ia,wuu,qu,arz,mn,bat-smg,wa,si,or,yi,am,gd,cdo,nap,bug,mai,hsb,ilo,map-bms,fo,xmf,mzn,li,vec,sd,eml,sah,os,sa,diq,ps,mrj,mhr,zh-classical,hif,nv,roa-tara,ace,bcl,frr,hak,szl,pam,nso,km,se,hyw,rue,mi,nah,vls,bh,nds-nl,crh,gan,vep,sc,ab,as,bo,glk" "grp3" "myv,co,tk,fiu-vro,so,lrc,kv,csb,shn,gv,sn,udm,zea,ay,ie,pcd,nrm,kab,ug,stq,lez,kw,ha,lad,mwl,haw,gom,gn,rm,lij,lfn,lo,koi,mt,frp,fur,dsb,ext,ang,ln,dty,olo,cbk-zam,dv,ksh,bjn,gag,pi,pfl,pag,av,bxr,gor,xal,krc,za,pap,kaa,pdc,tyv,rw,to,kl,nov,arc,jam,kbp,kbd,tpi,tet,ig,ki,zu,wo,na,sat,jbo,roa-rup,lbe,bi,ty,mdf,kg,lg,tcy,srn,inh" "grp4" "xh,atj,ltg,chr,sm,pih,om,tn,ak,cu,ts,tw,rmy,bm,st,chy,rn,got,tum,ny,ss,ch,pnt,fj,iu,ady,ve,ee,ks,ik,sg,ff,dz,ti,din,cr,ng,cho,kj,mh,ho,ii,aa,mus,hz,kr"}}
+{{$groups := dict "grp1" "ab,ady,af,als,alt,am,ami,an,ang,anp,ar,ary,arz,as,ast,av,avk,awa,ay,az,azb,ba,ban,bar,bat_smg,bcl,bdr,be,be_x_old,bew,bg,bh,bjn,blk,bm,bn,bo,bpy,br,bs,btm,bug,bxr,ca,cbk_zam,cdo,ce,ceb,ch"
+"grp2" "ckb,co,commons,crh,cs,csb,cu,cv,cy,da,dag,de,dga,din,diq,dsb,dtp,dty,dv,dz,el,eml,en,eo,es,et,eu,ext,fa,fat,ff,fi,fiu_vro,fj,fo,fr,frp,frr,fur,fy,ga,gag,gan,gd,gl,glk,gn,gom,gor,got"
+"grp3" "gpe,gu,gv,ha,hak,haw,he,hi,hif,hr,hsb,ht,hu,hy,hyw,ia,iba,id,ie,ig,ilo,incubator,inh,io,is,it,ja,jam,jbo,jv,ka,kaa,kab,kbd,kcg,kg,kge,ki,kk,kl,km,kn,knc,ko,krc,ks,ksh,ku,kv,kw"
+"grp4" "ky,la,labs,lad,lb,lbe,lez,lfn,lg,li,lij,lld,lmo,ln,lo,logoc,lrc,lt,ltg,lv,mad,mai,map_bms,mediawiki,meta,mg,mhr,mi,min,mk,ml,mn,mni,mnw,mo,mr,mrj,ms,mt,mwl,my,myv,mzn,nah,nap,nds,nds_nl,ne,new,nia"
+"grp5" "nl,nn,no,nov,nr,nrm,nso,nv,ny,olo,om,or,os,outreach,pa,pag,pam,pap,pcd,pcm,pdc,pfl,pi,pl,pms,pnb,pnt,ps,pt,pwn,qu,rm,rmy,ro,roa_rup,roa_tara,rsk,ru,rue,rw,sa,sah,sat,sc,scn,sco,sd,se,sh,shi"
+"grp6" "shn,si,simple,sk,skr,sl,sm,smn,sn,so,sources,species,sq,sr,ss,st,stq,strategy,su,sv,sw,syl,szl,ta,tcy,tdd,te,test,test2,tet,tg,th,tk,tl,tly,tn,tpi,tr,ts,tt,tum,tw,ty,tyv,udm,ug,uk,ur,usability,uz"
+"grp7" "vec,vep,vi,vls,vo,wa,war,wikidata,wikimania2007,wo,wuu,xal,xh,xmf,yi,yo,za,zea,zgh,zh,zh_classical,zh_min_nan,zh_yue,zu"}}
 {{range $i, $g := $groups}}
     wiki-{{$i}}:
     {{$languages := split $g ","}}
