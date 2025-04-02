@@ -29,14 +29,16 @@ dict "wikivoyage" dict "grp16" "bn,cs,de,en,eo,es,fa,fr,he,hi,id,it,ja,nl,pt,ru,
 dict "wiktionary" dict "grp17" "af,ar,az,bg,bn,br,bs,ca,cs,cy,da,de,el,en,eo,es,et,fa,fi,fr,gd,gl,gom,he,hi,hif,hu,hy,id,ie,is,it,ja,ka,kaa,kk,km,kn,ko,ku,lmo,lt,mg,mk,ml,mn,mnw,mr,ms"
 "grp18" "nds,nl,no,oc,pl,pt,ro,ru,sd,sg,si,simple,skr,sq,sr,sv,ta,te,th,tl,tr,uk,uz,vec,vi,wa,yue,zh"}}
 
-{{range $i, $g := $groupsm}}
-    wikim-wmf-{{$i}}:
-    {{$languages := split $g ","}}
-     {{$hosts := join ".wikimedia.beta.math.wmflabs.org`,`" $languages}}
-      rule: Host(`{{$hosts}}.wikimedia.beta.math.wmflabs.org`)
+{{range $site, $group := $sites}}
+  {{range $name, $languages := $group}}
+    wikim-wmf-{{$name}}:
+    {{$language := split $languages ","}}
+     {{$hosts := join ".{{$site}}.beta.math.wmflabs.org`,`" $language}}
+      rule: Host(`{{$hosts}}.{{$site}}.beta.math.wmflabs.org`)
       service: mediawiki-beta@docker
       entryPoints:
        - websecure
       tls:
         certResolver: le
+  {{end}}
 {{end}}
