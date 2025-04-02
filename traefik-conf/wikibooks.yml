@@ -7,7 +7,7 @@ http:
     wikibooks-{{$i}}:
     {{$languages := split $g ","}}
      {{$hosts := join "book.beta.physikerwelt.de`,`" $languages}}
-      rule: Host(`{{$hosts}}.beta.physikerwelt.de`)
+      rule: Host(`{{$hosts}}.book.beta.physikerwelt.de`)
       service: mediawiki-beta@docker
       entryPoints:
        - websecure
@@ -18,7 +18,7 @@ http:
     wikibooks-wmf-{{$i}}:
     {{$languages := split $g ","}}
      {{$hosts := join "book.beta.math.wmflabs.org`,`" $languages}}
-      rule: Host(`{{$hosts}}.beta.math.wmflabs.org`)
+      rule: Host(`{{$hosts}}.book.beta.math.wmflabs.org`)
       service: mediawiki-beta@docker
       entryPoints:
        - websecure
