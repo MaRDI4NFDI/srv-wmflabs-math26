@@ -1,0 +1,27 @@
+http:
+  routers:
+# work around letsencrypts` limits (max 50 certs, max 100 domains per cert)
+{{$groups-book := dict "grp8" "af,ang,ar,az,ba,be,bg,bn,ca,cs,da,de,el,en,eo,es,et,eu,fa,fi,fr,gl,he,hi,hr,hu,hy,id,is,it,ja,ka,km,ko,ku,la,lt,lv,mk,ml,ms,ne,nl,no,oc,pa,pl,pt,ro"
+"grp9" "ru,shn,si,simple,sk,sl,sq,sr,sv,ta,te,tg,th,tl,tr,tt,uk,ur,vi,zh,zh-min-nan"}}
+{{range $i, $g := $groups-book}}
+    wikibooks-{{$i}}:
+    {{$languages := split $g ","}}
+     {{$hosts := join "book.beta.physikerwelt.de`,`" $languages}}
+      rule: Host(`{{$hosts}}.beta.physikerwelt.de`)
+      service: mediawiki-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
+{{end}}
+{{range $i, $g := $groups-book}}
+    wikibooks-wmf-{{$i}}:
+    {{$languages := split $g ","}}
+     {{$hosts := join "book.beta.math.wmflabs.org`,`" $languages}}
+      rule: Host(`{{$hosts}}.beta.math.wmflabs.org`)
+      service: mediawiki-beta@docker
+      entryPoints:
+       - websecure
+      tls:
+        certResolver: le
+{{end}}
