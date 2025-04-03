@@ -6,8 +6,10 @@ http:
 }}{{range $siteid, $v := $sites}}
 {{range $groupId, $languages := $v}}
     wikim-wmf-{{$groupId}}:
-    {{$language := split $languages ","}}
-    {{$hosts := join ".{{$siteid}}.beta.math.wmflabs.org`,`" $language}}
+    {{- $language := split $languages "," -}}
+    {{- $domain :=  join  $siteid  ".beta.math.wmflabs.org`,`" -}}
+    {{- $domain :=  join  "." $domain  -}}
+    {{- $hosts := join $domain $language }}
       rule: Host(`{{$hosts}}.{{$siteid}}.beta.math.wmflabs.org`)
       service: mediawiki-beta@docker
       entryPoints:
