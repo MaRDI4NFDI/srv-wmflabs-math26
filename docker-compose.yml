@@ -30,7 +30,7 @@ services:
       - traefik.http.routers.mathoid-beta.tls.certresolver=le
   database:
     container_name: db
-    image: mariadb:10.8.2 #See https://stackoverflow.com/a/72417962
+    image: mariadb:11.6
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     volumes:
