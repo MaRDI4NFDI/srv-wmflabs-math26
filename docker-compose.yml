@@ -36,6 +36,7 @@ services:
     volumes:
       - mw-database:/var/lib/mysql
       - ./dumps:/docker-entrypoint-initdb.d
+      - /data/project/backup:/backup:ro
     secrets:
       - db_root_password
     labels:
