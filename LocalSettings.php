@@ -175,7 +175,7 @@ if( str_contains( $host, '.wik' ) ) {
 	// $wgDBname = 'wiki_' . $match[1];
 	$wikiId = false;
 	$wgDBuser = "wiki";
-	$wgServer = 'https://' . $match[1] . $match[2] . '.beta.math.wmflabs.org';
+	$wgServer = 'https://' . $match[1] . '.' . $match[2] . '.beta.math.wmflabs.org';
 	if ( LanguageCode::isWellFormedLanguageTag( $lang ) ) {
 		$wgLanguageCode = $lang;
 	}
