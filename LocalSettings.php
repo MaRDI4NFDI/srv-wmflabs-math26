@@ -27,7 +27,7 @@ $wgMetaNamespace = "Testwiki";
 ## For more information on customizing the URLs
 ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
 ## https://www.mediawiki.org/wiki/Manual:Short_URL
-$wgScriptPath = "";
+$wgScriptPath = '/w';
 $wgArticlePath = "/wiki/$1";
 $wgUsePathInfo = false;
 ## The protocol and server name to use in fully-qualified URLs
@@ -187,7 +187,6 @@ if( str_contains( $host, '.wik' ) ) {
 	$wgEnableWikibaseRepo = true;
 	$wgEnableWikibaseClient = true;
 	$wgMathValidModes[] = 'native';
-	$wgScriptPath = '/w';
 	// only temp 
         //$wgGroupPermissions['*']['createaccount'] = true; 
 	//require_once "$IP/extensions/Wikibase/repo/Wikibase.php";
