@@ -75,3 +75,4 @@ secrets:
 volumes:
   mw-images:
   mw-database:
+  mw-cache:
