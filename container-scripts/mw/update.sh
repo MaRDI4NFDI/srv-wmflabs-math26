@@ -13,10 +13,11 @@ if [ ! -d "$DIR" ]; then
 fi
 
 # Loop through all files in the specified directory
-for lang in "$DIR"/*; do
-	[[ -d $lang ]] && continue
-	echo "processing wiki $lang.beta.math.wmflabs.org"
- 	filename="${lang##*/}" 
+for filepath in "$DIR"/*; do
+	[[ -d $filepath ]] && continue
+ 	filename="${filepath##*/}"
+	lang="${filename%.xml.bz}"
+	echo "processing wiki $lang.beta.math.wmflabs.org" 
 	export HTTP_HOST=$lang.beta.math.wmflabs.org
 	/var/www/html/w/./maintenance/update.php --quick 2>&1 > "$DIR"/updatelog/$filename.log || echo "Error updating $lang"
 done
