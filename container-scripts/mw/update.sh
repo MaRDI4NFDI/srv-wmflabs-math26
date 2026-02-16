@@ -17,6 +17,14 @@ for filepath in "$DIR"/*; do
 	[[ -d $filepath ]] && continue
 	filename="${filepath##*/}"
 	lang="${filename%.xml*}"
+	
+	# Transform filename format from 'zuwiki' to 'zu.wiki' to match LocalSettings.php pattern
+	# This ensures the domain matches the pattern ([0-9a-z-]+)\.(wik.*?)\.beta\.math\.wmflabs\.org
+	# Files already in correct format (e.g., 'zu.wiki', 'en-gb.wikibooks') pass through unchanged
+	if [[ $lang =~ ^([0-9a-z-]+)(wik[0-9a-z]*)$ ]]; then
+		lang="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}"
+	fi
+	
 	echo "processing wiki $lang.beta.math.wmflabs.org" 
 	export HTTP_HOST=$lang.beta.math.wmflabs.org
 	export SERVER_NAME=$lang.beta.math.wmflabs.org
