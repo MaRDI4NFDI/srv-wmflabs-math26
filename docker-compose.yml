@@ -57,7 +57,7 @@ services:
     environment:
       WIKIBASE_HOST: mediawiki-fpm
   mediawiki-fpm:
-    image:   ghcr.io/mardi4nfdi/wikibase-production:latest
+    image: ghcr.io/mardi4nfdi/wikibase-production:latest
     container_name: mediawiki-fpm
     restart: unless-stopped
     volumes:
@@ -68,7 +68,7 @@ services:
       - ./LocalSettings.d:/shared/LocalSettings.d:ro
       - ./LocalSettings.d:/var/www/html/w/LocalSettings.d:ro
       - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
-     - ./container-scripts/mw:/var/www/html/scripts:ro
+      - ./container-scripts/mw:/var/www/html/scripts:ro
 secrets:
    db_root_password:
      file: secret/db_root_password.txt
