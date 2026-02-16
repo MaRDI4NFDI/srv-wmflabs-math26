@@ -187,6 +187,9 @@ if( str_contains( $host, '.wik' ) ) {
 	$wgEnableWikibaseRepo = true;
 	$wgEnableWikibaseClient = true;
 	$wgMathValidModes[] = 'native';
+	if ( $lang === 'meta' ){
+		wfLoadExtension( 'MathSearch' );
+	}
 	// only temp 
         //$wgGroupPermissions['*']['createaccount'] = true; 
 	//require_once "$IP/extensions/Wikibase/repo/Wikibase.php";
