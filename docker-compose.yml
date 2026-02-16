@@ -68,6 +68,7 @@ services:
       - ./LocalSettings.d:/shared/LocalSettings.d:ro
       - ./LocalSettings.d:/var/www/html/w/LocalSettings.d:ro
       - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
+      - /data/project/wdump/math:/data/project/wdump/math
       - ./container-scripts/mw:/var/www/html/scripts:ro
 secrets:
    db_root_password:
