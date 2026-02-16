@@ -42,31 +42,33 @@ services:
     labels:
       - "traefik.enable=false"
   mediawiki:
-    container_name: mw
-    image: ghcr.io/mardi4nfdi/docker-wikibase:main
+    image: ghcr.io/mardi4nfdi/apache-assets-production:latest
     restart: always
-    volumes:
-    - ./container-scripts/mw:/var/www/html/scripts:ro
-    - ./LocalSettings.php:/shared/LocalSettings.php:ro
-    - ./LocalSettings.d:/shared/LocalSettings.d:ro
-    - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
+    container_name: mw
     ports:
       - 8080:80
-    links:
-      - database
-  mediawiki-dev:
-    container_name: dev
-    image: ghcr.io/mardi4nfdi/docker-wikibase:dev
-    restart: on-failure
     volumes:
-    - ./container-scripts/mw:/var/www/html/scripts:ro
-    - ./LocalSettings.php:/shared/LocalSettings.php:ro
-    - ./LocalSettings.d:/shared/LocalSettings.d:ro
-    - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
-    ports:
-      - 8081:80
-    links:
-      - database
+      - mw-images:/var/www/html/w/images
+      - mw-cache:/cache
+      - ./LocalSettings.php:/shared/LocalSettings.php:ro
+      - ./LocalSettings.php:/var/www/html/w/LocalSettings.php:ro
+      - ./LocalSettings.d:/shared/LocalSettings.d:ro
+      - ./LocalSettings.d:/var/www/html/w/LocalSettings.d:ro
+    environment:
+      WIKIBASE_HOST: mediawiki-fpm
+  mediawiki-fpm:
+    image:   ghcr.io/mardi4nfdi/wikibase-production:latest
+    container_name: mediawiki-fpm
+    restart: unless-stopped
+    volumes:
+      - mw-images:/var/www/html/w/images
+      - mw-cache:/cache
+      - ./LocalSettings.php:/shared/LocalSettings.php:ro
+      - ./LocalSettings.php:/var/www/html/w/LocalSettings.php:ro
+      - ./LocalSettings.d:/shared/LocalSettings.d:ro
+      - ./LocalSettings.d:/var/www/html/w/LocalSettings.d:ro
+      - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
+     - ./container-scripts/mw:/var/www/html/scripts:ro
 secrets:
    db_root_password:
      file: secret/db_root_password.txt
