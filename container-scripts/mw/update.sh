@@ -19,5 +19,6 @@ for filepath in "$DIR"/*; do
 	lang="${filename%.xml*}"
 	echo "processing wiki $lang.beta.math.wmflabs.org" 
 	export HTTP_HOST=$lang.beta.math.wmflabs.org
+	export SERVER_NAME=$lang.beta.math.wmflabs.org
 	/var/www/html/w/./maintenance/update.php --wiki $lang --quick 2>&1 > "$DIR"/updatelog/$filename.log || echo "Error updating $lang"
 done
