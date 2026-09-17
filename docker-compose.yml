@@ -42,7 +42,7 @@ services:
     labels:
       - "traefik.enable=false"
   mediawiki:
-    image: ghcr.io/mardi4nfdi/apache-assets-production:latest
+    image: ghcr.io/mardi4nfdi/apache-assets:latest
     restart: always
     container_name: mw
     ports:
@@ -57,7 +57,7 @@ services:
     environment:
       WIKIBASE_HOST: mediawiki-fpm
   mediawiki-fpm:
-    image: ghcr.io/mardi4nfdi/wikibase-production:latest
+    image: ghcr.io/mardi4nfdi/wikibase:latest
     container_name: mediawiki-fpm
     restart: unless-stopped
     volumes:
