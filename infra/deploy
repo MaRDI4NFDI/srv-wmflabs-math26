@@ -1,0 +1,75 @@
+#!/bin/bash
+# Creates or updates math26 and starts the services.
+set -euo pipefail
+cd "$(dirname "$0")"
+HOST=math26
+
+# The cloudvps provider only exists for linux/amd64 and cannot read clouds.yaml.
+tofu() {
+	local cfg
+	cfg=$(openstack --os-cloud "${OS_CLOUD:-math}" configuration show --unmask -f json)
+	get() { python3 -c "import json,sys; print(json.load(sys.stdin)['$1'])" <<<"$cfg"; }
+	local tty=()
+	[ -t 0 ] && tty=(-it)
+	OS_AUTH_URL=$(get auth.auth_url) \
+	OS_APPLICATION_CREDENTIAL_ID=$(get auth.application_credential_id) \
+	OS_APPLICATION_CREDENTIAL_SECRET=$(get auth.application_credential_secret) \
+	OS_PROJECT_ID=math OS_REGION_NAME=eqiad1-r \
+	docker run --rm ${tty[@]+"${tty[@]}"} --platform linux/amd64 \
+		-e OS_AUTH_URL -e OS_APPLICATION_CREDENTIAL_ID -e OS_APPLICATION_CREDENTIAL_SECRET \
+		-e OS_PROJECT_ID -e OS_REGION_NAME \
+		-v "$PWD":/work -w /work ghcr.io/opentofu/opentofu:1.12.6 "$@"
+}
+
+remote() {
+	ssh -T -o BatchMode=yes -o RequestTTY=no -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new "$HOST" "$@"
+}
+
+trap 'rm -f math26.tfplan' EXIT
+tofu init -input=false >/dev/null
+tofu plan -input=false -out=math26.tfplan
+read -r -p "Apply this plan? [y/N] " answer
+[ "$answer" = y ] || exit 1
+tofu apply -input=false math26.tfplan
+# A recreated instance has a new host key.
+ssh-keygen -R "$(ssh -G "$HOST" | awk '/^hostname /{print $2}')" >/dev/null 2>&1 || true
+
+echo "Waiting for the first boot of $HOST"
+for _ in $(seq 120); do
+	remote true 2>/dev/null && break
+	sleep 15
+done
+# Exit code 2 means done with warnings, which the WMCS cloud-init always has.
+remote 'sudo cloud-init status --wait >/dev/null; [ $? -le 2 ]'
+# Apply the Puppet prefix now instead of waiting for the next scheduled run.
+for _ in 1 2; do
+	remote 'systemctl is-active -q docker' && break
+	remote 'sudo puppet agent -t >/dev/null 2>&1' || true
+done
+remote 'systemctl is-active -q docker' || { echo "Puppet did not start Docker"; exit 1; }
+echo "Puppet started Docker"
+
+remote 'sudo bash -s' <<'EOF'
+set -euo pipefail
+DIR=/srv/srv-wmflabs-math26
+# TODO: use profile::labs::cindermount::srv once T439324 is fixed; it times out while formatting.
+if ! mountpoint -q /srv; then
+	echo "Formatting the volume, this takes several minutes"
+	systemctl stop docker docker.socket
+	root=$(lsblk -no PKNAME "$(findmnt -no SOURCE /)")
+	dev=$(lsblk -dn -o NAME,TYPE | awk -v root="$root" '$2 == "disk" && $1 != root {print $1; exit}')
+	/usr/local/sbin/wmcs-prepare-cinder-volume --device "$dev" --mountpoint /srv --force --allow-unattended-format
+	systemctl start docker
+fi
+apt-get install -y docker-compose
+[ -d "$DIR/.git" ] || git clone https://github.com/MaRDI4NFDI/srv-wmflabs-math26.git "$DIR"
+cd "$DIR"
+install -d -m 700 secret
+if [ ! -f secret/db_root_password.txt ]; then
+	(umask 077; openssl rand -base64 32 > secret/db_root_password.txt)
+fi
+for key in wgSecretKey wgUpgradeKey; do
+	sed -i "s/^\\\$$key = \"\*\*\*REMOVED\*\*\*\";/\\\$$key = \"$(openssl rand -hex 32)\";/" LocalSettings.php
+done
+docker-compose up -d
+EOF

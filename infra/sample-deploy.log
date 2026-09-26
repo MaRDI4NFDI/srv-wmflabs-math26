@@ -1,0 +1,308 @@
+# infra/deploy on 2026-09-27, answered y. Seconds since start; download progress lines removed.
+[   4s] data.openstack_images_image_v2.trixie: Reading...
+[   4s] data.openstack_networking_network_v2.dualstack: Reading...
+[   4s] data.openstack_networking_floatingip_v2.public: Reading...
+[   4s] data.openstack_compute_flavor_v2.math26: Reading...
+[   6s] data.openstack_networking_floatingip_v2.public: Read complete after 1s [id=4b862ad7-7612-4bde-8eb2-ef9d8b5006a4]
+[   6s] data.openstack_networking_network_v2.dualstack: Read complete after 1s [id=d8a16ddf-c01f-4f22-8b67-8ed18b4b1b45]
+[   6s] data.openstack_images_image_v2.trixie: Read complete after 1s [id=09ac7914-8b26-41c2-b5ab-9c2319ca9e9b]
+[   6s] data.openstack_compute_flavor_v2.math26: Read complete after 2s [id=bf056b6b-4d2a-41ac-bcfb-141d1d94aa22]
+[   6s] 
+[   6s] OpenTofu used the selected providers to generate the following execution
+[   6s] plan. Resource actions are indicated with the following symbols:
+[   6s]   + create
+[   6s]  <= read (data resources)
+[   6s] 
+[   6s] OpenTofu will perform the following actions:
+[   6s] 
+[   6s]   # data.openstack_networking_port_v2.math26 will be read during apply
+[   6s]   # (config refers to values not yet known)
+[   6s]  <= data "openstack_networking_port_v2" "math26" {
+[   6s]       + all_fixed_ips          = (known after apply)
+[   6s]       + all_security_group_ids = (known after apply)
+[   6s]       + all_tags               = (known after apply)
+[   6s]       + allowed_address_pairs  = (known after apply)
+[   6s]       + binding                = (known after apply)
+[   6s]       + device_id              = (known after apply)
+[   6s]       + dns_assignment         = (known after apply)
+[   6s]       + extra_dhcp_option      = (known after apply)
+[   6s]       + id                     = (known after apply)
+[   6s]       + network_id             = "d8a16ddf-c01f-4f22-8b67-8ed18b4b1b45"
+[   6s]     }
+[   6s] 
+[   6s]   # cloudvps_puppet_prefix.math26 will be created
+[   6s]   + resource "cloudvps_puppet_prefix" "math26" {
+[   6s]       + hiera = <<-EOT
+[   6s]             "profile::docker::engine::settings":
+[   6s]               "data-root": "/srv/docker"
+[   6s]               "log-driver": "local"
+[   6s]         EOT
+[   6s]       + id    = (known after apply)
+[   6s]       + name  = "math26.math.eqiad1.wikimedia.cloud"
+[   6s]       + roles = [
+[   6s]           + "profile::docker::engine",
+[   6s]         ]
+[   6s]     }
+[   6s] 
+[   6s]   # openstack_blockstorage_volume_v3.math26 will be created
+[   6s]   + resource "openstack_blockstorage_volume_v3" "math26" {
+[   6s]       + attachment           = (known after apply)
+[   6s]       + availability_zone    = (known after apply)
+[   6s]       + id                   = (known after apply)
+[   6s]       + metadata             = (known after apply)
+[   6s]       + name                 = "math26"
+[   6s]       + region               = (known after apply)
+[   6s]       + size                 = 90
+[   6s]       + volume_retype_policy = "never"
+[   6s]       + volume_type          = (known after apply)
+[   6s]     }
+[   6s] 
+[   6s]   # openstack_compute_instance_v2.math26 will be created
+[   6s]   + resource "openstack_compute_instance_v2" "math26" {
+[   6s]       + access_ip_v4        = (known after apply)
+[   6s]       + access_ip_v6        = (known after apply)
+[   6s]       + all_metadata        = (known after apply)
+[   6s]       + all_tags            = (known after apply)
+[   6s]       + availability_zone   = (known after apply)
+[   6s]       + created             = (known after apply)
+[   6s]       + flavor_id           = "bf056b6b-4d2a-41ac-bcfb-141d1d94aa22"
+[   6s]       + flavor_name         = (known after apply)
+[   6s]       + force_delete        = false
+[   6s]       + hypervisor_hostname = (known after apply)
+[   6s]       + id                  = (known after apply)
+[   6s]       + image_id            = "09ac7914-8b26-41c2-b5ab-9c2319ca9e9b"
+[   6s]       + image_name          = (known after apply)
+[   6s]       + name                = "math26"
+[   6s]       + power_state         = "active"
+[   6s]       + region              = (known after apply)
+[   6s]       + security_groups     = [
+[   6s]           + "MathPublicIp",
+[   6s]           + "default",
+[   6s]         ]
+[   6s]       + stop_before_destroy = false
+[   6s]       + updated             = (known after apply)
+[   6s] 
+[   6s]       + network {
+[   6s]           + access_network = false
+[   6s]           + fixed_ip_v4    = (known after apply)
+[   6s]           + fixed_ip_v6    = (known after apply)
+[   6s]           + mac            = (known after apply)
+[   6s]           + name           = (known after apply)
+[   6s]           + port           = (known after apply)
+[   6s]           + uuid           = "d8a16ddf-c01f-4f22-8b67-8ed18b4b1b45"
+[   6s]         }
+[   6s]     }
+[   6s] 
+[   6s]   # openstack_compute_volume_attach_v2.math26 will be created
+[   6s]   + resource "openstack_compute_volume_attach_v2" "math26" {
+[   6s]       + device      = (known after apply)
+[   6s]       + id          = (known after apply)
+[   6s]       + instance_id = (known after apply)
+[   6s]       + region      = (known after apply)
+[   6s]       + volume_id   = (known after apply)
+[   6s]     }
+[   6s] 
+[   6s]   # openstack_networking_floatingip_associate_v2.public will be created
+[   6s]   + resource "openstack_networking_floatingip_associate_v2" "public" {
+[   6s]       + fixed_ip    = (known after apply)
+[   6s]       + floating_ip = "185.15.56.41"
+[   6s]       + id          = (known after apply)
+[   6s]       + port_id     = (known after apply)
+[   6s]       + region      = (known after apply)
+[   6s]     }
+[   6s] 
+[   6s] Plan: 5 to add, 0 to change, 0 to destroy.
+[   6s] 
+[   6s] Changes to Outputs:
+[   6s]   + math26_ip = (known after apply)
+[   6s] 
+[   6s] ─────────────────────────────────────────────────────────────────────────────
+[   6s] 
+[   6s] Saved the plan to: math26.tfplan
+[   6s] 
+[   6s] To perform exactly these actions, run the following command to apply:
+[   6s]     tofu apply "math26.tfplan"
+[   9s] openstack_blockstorage_volume_v3.math26: Creating...
+[   9s] openstack_compute_instance_v2.math26: Creating...
+[  11s] openstack_blockstorage_volume_v3.math26: Creation complete after 2s [id=5431b174-d4af-40c1-9887-435e7bdd9693]
+[  35s] openstack_compute_instance_v2.math26: Creation complete after 26s [id=0d7e27c1-1137-4307-820a-9c77cbe0faef]
+[  35s] openstack_compute_volume_attach_v2.math26: Creating...
+[  35s] data.openstack_networking_port_v2.math26: Reading...
+[  35s] cloudvps_puppet_prefix.math26: Creating...
+[  35s] data.openstack_networking_port_v2.math26: Read complete after 1s [id=e88b1588-2859-448d-9dcf-74c21d4f9b1b]
+[  35s] openstack_networking_floatingip_associate_v2.public: Creating...
+[  36s] cloudvps_puppet_prefix.math26: Creation complete after 1s [name=math26.math.eqiad1.wikimedia.cloud]
+[  37s] openstack_networking_floatingip_associate_v2.public: Creation complete after 2s [id=4b862ad7-7612-4bde-8eb2-ef9d8b5006a4]
+[  42s] openstack_compute_volume_attach_v2.math26: Creation complete after 8s [id=0d7e27c1-1137-4307-820a-9c77cbe0faef/5431b174-d4af-40c1-9887-435e7bdd9693]
+[  42s] 
+[  42s] Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+[  42s] 
+[  42s] Outputs:
+[  42s] 
+[  42s] math26_ip = "172.16.19.215"
+[  42s] Waiting for the first boot of math26
+[ 408s] Puppet started Docker
+[ 411s] Formatting the volume, this takes several minutes
+[ 412s] mke2fs 1.47.2 (1-Jan-2025)
+[ 894s] Discarding device blocks:        0/23592960  524288/23592960 1048576/23592960 1572864/23592960 2097152/23592960 2621440/23592960 3145728/23592960 3670016/23592960 4194304/23592960 4718592/23592960 5242880/23592960 5767168/23592960 6291456/23592960 6815744/23592960 7340032/23592960 7864320/23592960 8388608/23592960 8912896/23592960 9437184/23592960 9961472/2359296010485760/2359296011010048/2359296011534336/2359296012058624/2359296012582912/2359296013107200/2359296013631488/2359296014155776/2359296014680064/2359296015204352/2359296015728640/2359296016252928/2359296016777216/2359296017301504/2359296017825792/2359296018350080/2359296018874368/2359296019398656/2359296019922944/2359296020447232/2359296020971520/2359296021495808/2359296022020096/2359296022544384/2359296023068672/23592960                 done                            
+[ 894s] Creating filesystem with 23592960 4k blocks and 5898240 inodes
+[ 895s] Filesystem UUID: e3f82b0e-2435-4b0a-a1a3-e172a26d79be
+[ 895s] Superblock backups stored on blocks: 
+[ 895s] 	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, 
+[ 895s] 	4096000, 7962624, 11239424, 20480000
+[ 895s] 
+[ 895s] Allocating group tables:   0/720       done                            
+[ 895s] Writing inode tables:   0/720       done                            
+[ 897s] Creating journal (131072 blocks): done
+[ 897s] Writing superblocks and filesystem accounting information:   0/720       done
+[ 897s] 
+[ 897s] Formatting as ext4...
+[ 897s] Done.
+[ 897s] Mounting on /srv...
+[ 897s] Updating fstab with UUID=e3f82b0e-2435-4b0a-a1a3-e172a26d79be /srv ext4 discard,nofail,x-systemd.device-timeout=2s 0 2
+[ 897s] ...
+[ 897s] Done.
+[ 899s] Reading package lists...
+[ 899s] Building dependency tree...
+[ 899s] Reading state information...
+[ 899s] The following NEW packages will be installed:
+[ 899s]   docker-compose
+[ 899s] 0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+[ 899s] Need to get 13.0 MB of archives.
+[ 899s] After this operation, 64.4 MB of additional disk space will be used.
+[ 900s] debconf: unable to initialize frontend: Dialog
+[ 900s] debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+[ 900s] debconf: falling back to frontend: Readline
+[ 900s] debconf: unable to initialize frontend: Readline
+[ 900s] debconf: (This frontend requires a controlling tty.)
+[ 900s] debconf: falling back to frontend: Teletype
+[ 900s] debconf: unable to initialize frontend: Teletype
+[ 900s] debconf: (This frontend requires a controlling tty.)
+[ 900s] debconf: falling back to frontend: Noninteractive
+[ 900s] Fetched 13.0 MB in 0s (88.9 MB/s)
+[ 901s] Setting up docker-compose (2.26.1-4) ...
+[ 901s] Processing triggers for man-db (2.13.1-1) ...
+[ 902s] Cloning into '/srv/srv-wmflabs-math26'...
+[ 903s] time="2026-09-26T23:51:32Z" level=warning msg="/srv/srv-wmflabs-math26/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+[ 903s]  mediawiki-fpm Pulling 
+[ 903s]  mediawiki Pulling 
+[ 903s]  reverse-proxy Pulling 
+[ 903s]  mathoid Pulling 
+[ 903s]  whoami Pulling 
+[ 903s]  database Pulling 
+[ 906s]  eb4fe7dcdcb8 Pull complete 
+[ 906s]  6b37362b3da7 Pull complete 
+[ 906s]  6b37362b3da7 Pull complete 
+[ 907s]  6db0cf540580 Pull complete 
+[ 907s]  cb3bed725cd6 Pull complete 
+[ 907s]  4f4fb700ef54 Pull complete 
+[ 907s]  2f4636dca226 Pull complete 
+[ 907s]  1320c4426edf Pull complete 
+[ 907s]  7a3bdd751d95 Pull complete 
+[ 907s]  2fe676876cd0 Pull complete 
+[ 907s]  f6f6b56f18d2 Pull complete 
+[ 908s]  c4a1c344efd7 Pull complete 
+[ 908s]  55a38df038e4 Pull complete 
+[ 908s]  a62cde666a81 Pull complete 
+[ 908s]  af0d77f12e26 Pull complete 
+[ 908s]  e1e006482989 Pull complete 
+[ 908s]  abab75890e80 Pull complete 
+[ 908s]  f34d17ac4e94 Pull complete 
+[ 908s]  a3412b7e2895 Pull complete 
+[ 908s]  10325ba7f19c Pull complete 
+[ 908s]  04c42aff199d Pull complete 
+[ 908s]  161ac5f41086 Pull complete 
+[ 910s]  1421498987d6 Pull complete 
+[ 910s]  f8a53aa8837c Pull complete 
+[ 910s]  299924a7bc8f Pull complete 
+[ 913s]  29015087d73b Pull complete 
+[ 913s]  e2de96513ba9 Pull complete 
+[ 914s]  5a7813e071bf Pull complete 
+[ 916s]  0109a00d13bc Pull complete 
+[ 916s]  866e8ec4e67d Pull complete 
+[ 917s]  f67c6fbc0ef5 Pull complete 
+[ 917s]  b686a4f73445 Pull complete 
+[ 917s]  9b9c9ac6d652 Pull complete 
+[ 917s]  d3caffff64d8 Pull complete 
+[ 917s]  whoami Pulled 
+[ 917s]  3676eae6f902 Pull complete 
+[ 917s]  48430276ac73 Pull complete 
+[ 917s]  1f731489858b Pull complete 
+[ 917s]  760f6e3db6bf Pull complete 
+[ 917s]  65dd09f27c61 Pull complete 
+[ 918s]  87f68aaed5e8 Pull complete 
+[ 920s]  78cb21c375ca Pull complete 
+[ 921s]  29b4ab7b88e7 Pull complete 
+[ 921s]  acb2f33459b1 Pull complete 
+[ 923s]  56c6cd8c2cc4 Pull complete 
+[ 923s]  reverse-proxy Pulled 
+[ 923s]  7076f733235e Pull complete 
+[ 923s]  4f4fb700ef54 Pull complete 
+[ 923s]  c126a61fc8cc Pull complete 
+[ 924s]  2cbd49ab14b1 Pull complete 
+[ 924s]  640331c2cc76 Pull complete 
+[ 925s]  edb426f4a1af Pull complete 
+[ 925s]  database Pulled 
+[ 925s]  dc2436372f1b Pull complete 
+[ 925s]  6d7a56e8035a Pull complete 
+[ 925s]  4f4fb700ef54 Pull complete 
+[ 925s]  mathoid Pulled 
+[ 926s]  f3c7801349fa Pull complete 
+[ 926s]  8078bbab3b47 Pull complete 
+[ 926s]  31991bb8d8ab Pull complete 
+[ 937s]  13139a7f7773 Pull complete 
+[ 937s]  85c0b7aae53f Pull complete 
+[ 939s]  01bccb0ad03d Pull complete 
+[ 939s]  d067b333b99d Pull complete 
+[ 939s]  59746ac83319 Pull complete 
+[ 941s]  65ec7c8b3612 Pull complete 
+[ 941s]  a71cb7acd9ac Pull complete 
+[ 941s]  adf5b362817b Pull complete 
+[ 941s]  mediawiki Pulled 
+[ 966s]  741918ea3971 Pull complete 
+[ 966s]  77210cf1d7b4 Pull complete 
+[ 966s]  07af62e7662e Pull complete 
+[ 967s]  de9c34ca8e37 Pull complete 
+[ 967s]  17ac934193e7 Pull complete 
+[ 967s]  2dbde228431e Pull complete 
+[ 967s]  0418c5bb3a3e Pull complete 
+[ 967s]  e9985feb9ad7 Pull complete 
+[ 967s]  72fa8dfb4421 Pull complete 
+[ 967s]  dfd77e0e6327 Pull complete 
+[ 967s]  f3a2ebb3dddc Pull complete 
+[ 967s]  f4a246ed853e Pull complete 
+[ 967s]  1b8593dab298 Pull complete 
+[ 967s]  mediawiki-fpm Pulled 
+[ 967s]  Network beta_default  Creating
+[ 967s]  Network beta_default  Created
+[ 967s]  Volume "beta_mw-cache"  Creating
+[ 967s]  Volume "beta_mw-cache"  Created
+[ 967s]  Volume "beta_mw-database"  Creating
+[ 967s]  Volume "beta_mw-database"  Created
+[ 967s]  Volume "beta_mw-images"  Creating
+[ 967s]  Volume "beta_mw-images"  Created
+[ 968s]  Container beta-whoami-1  Creating
+[ 968s]  Container db  Creating
+[ 968s]  Container beta-reverse-proxy-1  Creating
+[ 968s]  Container mediawiki-fpm  Creating
+[ 968s]  Container mw  Creating
+[ 968s]  Container mathoid  Creating
+[ 983s]  Container beta-whoami-1  Created
+[ 983s]  Container mathoid  Created
+[ 983s]  Container mw  Created
+[ 983s]  Container db  Created
+[ 983s]  Container beta-reverse-proxy-1  Created
+[ 983s]  Container mediawiki-fpm  Created
+[ 983s]  Container mathoid  Starting
+[ 983s]  Container db  Starting
+[ 983s]  Container beta-reverse-proxy-1  Starting
+[ 983s]  Container beta-whoami-1  Starting
+[ 983s]  Container mediawiki-fpm  Starting
+[ 983s]  Container mw  Starting
+[ 984s]  Container mathoid  Started
+[ 984s]  Container db  Started
+[ 984s]  Container beta-reverse-proxy-1  Started
+[ 984s]  Container beta-whoami-1  Started
+[ 984s]  Container mediawiki-fpm  Started
+[ 984s]  Container mw  Started
+[984s] exit 0

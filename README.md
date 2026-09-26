@@ -2,7 +2,7 @@
 
 Docker Compose setup for the math server in the WMCloud project
 [Math](https://wikitech.wikimedia.org/wiki/Nova_Resource:Math).
-It currently runs on the instance math24 and moves to math26.
+It runs on the instance math26, which `infra/deploy` creates.
 
 Serves:
 * `<lang>.<site>.beta.math.wmflabs.org` – one MediaWiki per imported Wikimedia dump
@@ -26,21 +26,31 @@ The filtered dumps are expected in `/data/project/wdump/math`.
 ## Secrets
 
 Secrets are not part of this repository.
-Before the first start:
-* Create `secret/db_root_password.txt` (ignored by git).
-* Replace every `***REMOVED***` placeholder in `LocalSettings.php`,
-  `traefik-conf/dynamic.yml` and `container-scripts/mw/createWiki`.
-
-The history was imported from the private repository gipplab/srv-math24
-with all secrets removed.
+`infra/deploy` generates the database root password, `$wgSecretKey` and `$wgUpgradeKey` on the server.
+The `***REMOVED***` placeholders for `$wgDBpassword`, the Traefik dashboard and `container-scripts/mw/createWiki` are still open.
 
 ## Setup
 
-```bash
-git clone https://github.com/MaRDI4NFDI/srv-wmflabs-math26.git
-cd srv-wmflabs-math26
-docker compose up -d
-```
+1. In [Horizon](https://horizon.wikimedia.org/identity/application_credentials/), select the project `math`,
+   create an application credential and download its `clouds.yaml`.
+   Save it as `~/.config/openstack/clouds.yaml` and rename its entry `openstack` to `math`.
+2. Install Docker and the OpenStack CLI (`python-openstackclient`).
+   OpenTofu runs in a container, because the Cloud VPS provider only exists for linux/amd64.
+3. Make `ssh math26` work, e.g. with this entry in `~/.ssh/config`:
+   ```
+   Host math26
+       Hostname math26.math.eqiad1.wikimedia.cloud
+       ProxyJump primary.bastion.wmflabs.org
+   ```
+4. Clone this repository and run the script:
+   ```bash
+   git clone https://github.com/MaRDI4NFDI/srv-wmflabs-math26.git
+   srv-wmflabs-math26/infra/deploy
+   ```
+   It shows the OpenTofu plan and asks before applying it, then runs Puppet on math26 and starts the services.
+   See [a sample run](infra/sample-deploy.log).
+
+The instance has no `user_data`, because it would override the WMCS cloud-init and break Puppet.
 
 Updates are handled manually.
 
