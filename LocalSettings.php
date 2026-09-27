@@ -162,8 +162,12 @@ if ( defined( 'MW_DB' ) ) {
 	die( "Server name not set.\n" );
 }
 
-$srv = $_SERVER['SERVER_NAME'];
-$host = $_SERVER['HTTP_HOST'] ?? false;
+$srv = $_SERVER['SERVER_NAME'] ?? '';
+$host = $_SERVER['HTTP_HOST'] ?? '';
+// Maintenance scripts run with --wiki afwiki get the settings of af.wiki.beta.math.wmflabs.org.
+if ( defined( 'MW_DB' ) && preg_match( '/^([0-9a-z_]+?)(wik[a-z]*)$/', MW_DB, $match ) === 1 ) {
+	$host = str_replace( '_', '-', $match[1] ) . '.' . $match[2] . '.beta.math.wmflabs.org';
+}
 if( str_contains( $host, '.wik' ) ) {
 	if ( preg_match( '/^([0-9a-z-]+)\.(wik.*?)\.beta\.math\.wmflabs\.org$/', $host, $match ) !== 1 ) {
 		die( "Server name $host does not match the patterns for wikis." );
@@ -187,6 +191,8 @@ if( str_contains( $host, '.wik' ) ) {
 	$wgEnableWikibaseRepo = true;
 	$wgEnableWikibaseClient = true;
 	$wgMathValidModes[] = 'native';
+	wfLoadExtension( 'Scribunto' );
+	$wgScribuntoDefaultEngine = 'luastandalone';
 	if ( $lang === 'meta' ){
 		wfLoadExtension( 'MathSearch' );
 	}
