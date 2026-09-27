@@ -1,8 +1,6 @@
-version: '3.4'
-
 services:
   reverse-proxy:
-    image: traefik
+    image: traefik:v3
     ports:
       # The HTTP port
       - "80:80"
@@ -14,11 +12,13 @@ services:
       - "./letsencrypt:/letsencrypt"
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik-conf:/traefik-conf:ro
+    secrets:
+      - traefik_users
     labels:
       - "traefik.enable=false"
   whoami:
     # A container that exposes an API to show its IP address
-    image: containous/whoami
+    image: traefik/whoami:v1.12
   mathoid:
     container_name: mathoid
     image: docker-registry.wikimedia.org/repos/mediawiki/services/mathoid:latest
@@ -30,19 +30,23 @@ services:
       - traefik.http.routers.mathoid-beta.tls.certresolver=le
   database:
     container_name: db
-    image: mariadb:11.6
+    image: mariadb:lts
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MARIADB_USER: wiki
+      MARIADB_PASSWORD_FILE: /run/secrets/db_wiki_password
     volumes:
       - mw-database:/var/lib/mysql
-      - ./dumps:/docker-entrypoint-initdb.d
+      - ./initdb:/docker-entrypoint-initdb.d:ro
       - /data/project/backup:/backup:ro
     secrets:
       - db_root_password
+      - db_wiki_password
     labels:
       - "traefik.enable=false"
   mediawiki:
-    image: ghcr.io/mardi4nfdi/apache-assets:latest
+    image: ghcr.io/mardi4nfdi/apache-assets:1.47
     restart: always
     container_name: mw
     ports:
@@ -56,8 +60,12 @@ services:
       - ./LocalSettings.d:/var/www/html/w/LocalSettings.d:ro
     environment:
       WIKIBASE_HOST: mediawiki-fpm
+    secrets:
+      - db_wiki_password
+      - wg_secret_key
+      - wg_upgrade_key
   mediawiki-fpm:
-    image: ghcr.io/mardi4nfdi/wikibase:latest
+    image: ghcr.io/mardi4nfdi/wikibase:1.47
     container_name: mediawiki-fpm
     restart: unless-stopped
     volumes:
@@ -70,9 +78,35 @@ services:
       - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
       - /data/project/wdump/math:/data/project/wdump/math
       - ./container-scripts/mw:/var/www/html/scripts:ro
+    secrets:
+      - db_wiki_password
+      - wg_secret_key
+      - wg_upgrade_key
+      - wiki_admin_password
+  # Updates the images within their pinned versions.
+  watchtower:
+    image: nickfedor/watchtower:1
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+    labels:
+      - "traefik.enable=false"
+# Generated on the server by infra/deploy.
 secrets:
-   db_root_password:
-     file: secret/db_root_password.txt
+  db_root_password:
+    file: secret/db_root_password.txt
+  db_wiki_password:
+    file: secret/db_wiki_password
+  wg_secret_key:
+    file: secret/wg_secret_key
+  wg_upgrade_key:
+    file: secret/wg_upgrade_key
+  wiki_admin_password:
+    file: secret/wiki_admin_password
+  traefik_users:
+    file: secret/traefik_users
 volumes:
   mw-images:
   mw-database:

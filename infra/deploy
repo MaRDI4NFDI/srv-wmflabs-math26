@@ -61,15 +61,20 @@ if ! mountpoint -q /srv; then
 	/usr/local/sbin/wmcs-prepare-cinder-volume --device "$dev" --mountpoint /srv --force --allow-unattended-format
 	systemctl start docker
 fi
-apt-get install -y docker-compose
-[ -d "$DIR/.git" ] || git clone https://github.com/MaRDI4NFDI/srv-wmflabs-math26.git "$DIR"
-cd "$DIR"
-install -d -m 700 secret
-if [ ! -f secret/db_root_password.txt ]; then
-	(umask 077; openssl rand -base64 32 > secret/db_root_password.txt)
+apt-get install -y docker-compose apache2-utils
+if [ -d "$DIR/.git" ]; then
+	git -C "$DIR" pull --ff-only
+else
+	git clone https://github.com/MaRDI4NFDI/srv-wmflabs-math26.git "$DIR"
 fi
-for key in wgSecretKey wgUpgradeKey; do
-	sed -i "s/^\\\$$key = \"\*\*\*REMOVED\*\*\*\";/\\\$$key = \"$(openssl rand -hex 32)\";/" LocalSettings.php
+cd "$DIR"
+# The directory keeps other users out; the files stay readable for the container users.
+install -d -m 700 secret
+umask 022
+for name in db_root_password.txt db_wiki_password wg_secret_key wg_upgrade_key wiki_admin_password traefik_dashboard_password; do
+	[ -f "secret/$name" ] || openssl rand -hex 32 > "secret/$name"
 done
+[ -f secret/traefik_users ] || htpasswd -nbB math "$(cat secret/traefik_dashboard_password)" > secret/traefik_users
+chmod 644 secret/*
 docker-compose up -d
 EOF

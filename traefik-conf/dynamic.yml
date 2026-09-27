@@ -45,8 +45,7 @@ http:
   middlewares:
     auth:
       basicAuth:
-        users:
-          - "math:***REMOVED***" #pw ***REMOVED***
+        usersFile: /run/secrets/traefik_users
     redirect:
       redirectScheme:
         scheme: https

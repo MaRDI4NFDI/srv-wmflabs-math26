@@ -56,8 +56,8 @@ $wgEmailAuthentication = true;
 $wgDBtype = "mysql";
 $wgDBserver = "db";
 $wgDBname = "wiki_physikerwelt";
-$wgDBuser = "wikiuser";
-$wgDBpassword = "***REMOVED***";
+$wgDBuser = "wiki";
+$wgDBpassword = trim( file_get_contents( '/run/secrets/db_wiki_password' ) );
 
 # MySQL specific settings
 $wgDBprefix = "";
@@ -96,14 +96,14 @@ $wgShellLocale = "C.UTF-8";
 # Site language code, should be one of the list in ./languages/data/Names.php
 $wgLanguageCode = "en";
 
-$wgSecretKey = "***REMOVED***";
+$wgSecretKey = trim( file_get_contents( '/run/secrets/wg_secret_key' ) );
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "***REMOVED***";
+$wgUpgradeKey = trim( file_get_contents( '/run/secrets/wg_upgrade_key' ) );
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation

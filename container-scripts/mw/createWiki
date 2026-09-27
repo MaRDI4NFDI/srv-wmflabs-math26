@@ -43,7 +43,7 @@ then
 fi
 
 # Install the base html tables on the db server & remove the generated LocalSettings.php
-php maintenance/install.php --dbname=wiki_$1 --dbserver="db" --dbuser=wiki --dbpass=***REMOVED*** --server="https://$1.beta.physikerwelt.de/" --lang=$1 --pass=***REMOVED*** "Wiki $1" "admin"
+php maintenance/install.php --dbname=wiki_$1 --dbserver="db" --dbuser=wiki --dbpass="$(cat /run/secrets/db_wiki_password)" --server="https://$1.beta.physikerwelt.de/" --lang=$1 --pass="$(cat /run/secrets/wiki_admin_password)" "Wiki $1" "admin"
 rm /var/www/html/LocalSettings.php
 
 # Move back the old LocalSettings if we had moved one!

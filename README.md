@@ -19,6 +19,7 @@ Serves:
 | `database` (`db`) | mariadb |
 | `mediawiki` (`mw`) | ghcr.io/mardi4nfdi/apache-assets |
 | `mediawiki-fpm` | ghcr.io/mardi4nfdi/wikibase |
+| `watchtower` | nickfedor/watchtower, updates the images within their pinned versions |
 
 `LocalSettings.php` and `LocalSettings.d/` are mounted read-only into both MediaWiki containers.
 The filtered dumps are expected in `/data/project/wdump/math`.
@@ -26,8 +27,9 @@ The filtered dumps are expected in `/data/project/wdump/math`.
 ## Secrets
 
 Secrets are not part of this repository.
-`infra/deploy` generates the database root password, `$wgSecretKey` and `$wgUpgradeKey` on the server.
-The `***REMOVED***` placeholders for `$wgDBpassword`, the Traefik dashboard and `container-scripts/mw/createWiki` are still open.
+`infra/deploy` generates them in `/srv/srv-wmflabs-math26/secret` on the server,
+and the containers read them from `/run/secrets`.
+The Traefik dashboard user is `math`; its password is in `secret/traefik_dashboard_password`.
 
 ## Setup
 
@@ -62,13 +64,10 @@ newgrp docker
 
 ## Database
 
+The database user `wiki` is created when the database volume is initialized (see `initdb/`).
+
 ```bash
-docker exec -it db /bin/bash
-mysql -p"$(cat /run/secrets/db_root_password)"
-```
-```mysql
-CREATE USER 'wiki'@'%' IDENTIFIED BY '***REMOVED***';
-GRANT ALL PRIVILEGES ON `wiki\_%`.* TO 'wiki'@'%';
+docker exec -it db bash -c 'mariadb -p"$(cat /run/secrets/db_root_password)"'
 ```
 
 `scripts/backup-db` dumps all databases to `/data/project/backup/mathqid`.
