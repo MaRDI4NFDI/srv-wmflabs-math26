@@ -1,58 +1,7 @@
 #!/bin/bash
-filename="${1##*/}"
-readarray -t valid_language_codes < lanaguage_codes.csv
-# Function to check if a language code is valid
-is_valid_language_code() {
-  local lang_code="$1"
-  for valid_code in "${valid_language_codes[@]}"; do
-    if [[ "$valid_code" == "$lang_code" ]]; then
-      return 0  # Valid code found, return success
-    fi
-  done
-  return 1  # No valid code found, return failure
-}
-
-# Use a regular expression to extract the language code or identifier and suffix
-if [[ "$filename" =~ ^([_a-zA-Z0-9]+)wiki?([a-zA-Z0-9]*)\.xml\.bz$ ]]; then
-  language="${BASH_REMATCH[1]//_/-}"  # The language part (before 'wiki')
-  suffix="${BASH_REMATCH[2]}"    # The suffix after 'wiki'
-
-  # Check if the language is valid, otherwise default to "en"
-  if ! is_valid_language_code "$language"; then
-    echo "Invalid language code '$language', defaulting to 'en'."
-    language="en"
-  fi
-
-  # Output the result
-  echo "Language: $language"
-  if [ -n "$suffix" ]; then
-    echo "Suffix: $suffix"
-  fi
-else
-  echo "Invalid filename format."
-  exit 1
-fi
- 	
-
-exit 0
-
-# Hide the current LocalSettings.php if it exists
-if [ -f /var/www/html/LocalSettings.php ]
-then
-    mv /var/www/html/LocalSettings.php /var/www/html/LocalSettings.php.docker.tmp
-fi
-
-# Install the base html tables on the db server & remove the generated LocalSettings.php
-php maintenance/install.php --dbname=wiki_$1 --dbserver="db" --dbuser=wiki --dbpass="$(cat /run/secrets/db_wiki_password)" --server="https://$1.beta.physikerwelt.de/" --lang=$1 --pass="$(cat /run/secrets/wiki_admin_password)" "Wiki $1" "admin"
-rm /var/www/html/LocalSettings.php
-
-# Move back the old LocalSettings if we had moved one!
-if [ -f /var/www/html/LocalSettings.php.docker.tmp ]
-then
-    mv /var/www/html/LocalSettings.php.docker.tmp /var/www/html/LocalSettings.php
-fi
-export SERVER_NAME=$1.beta.physikerwelt.de
-echo "Updating $SERVER_NAME"
-php /var/www/html/maintenance/update.php --quick
-bzcat $filename | php /var/www/html/maintenance/importDump.php
-php /var/www/html/maintenance/initSiteStats.php
+# Creates the wiki for one filtered dump, e.g. enwiki.xml.bz, and imports the dump.
+set -euo pipefail
+wiki=$(basename "$1" | cut -d. -f1)
+echo "Creating $wiki"
+/var/www/html/w/maintenance/run installPreConfigured --wiki "$wiki"
+bzcat "$1" | /var/www/html/w/maintenance/run importDump --wiki "$wiki"
