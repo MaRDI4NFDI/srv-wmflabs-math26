@@ -8,7 +8,8 @@ Serves:
 * `<lang>.<site>.beta.math.wmflabs.org` – one MediaWiki per imported Wikimedia dump
 * `mardi.beta.math.wmflabs.org` – Wikibase repository for the wikis above
 * `mathoid.beta.math.wmflabs.org`
-* `traefik.beta.math.wmflabs.org` – Traefik dashboard (basic auth)
+* `traefik.beta.math.wmflabs.org` and `math-traefik-dashboard.wmcloud.org` – Traefik dashboard (basic auth);
+  the second goes through the Cloud VPS web proxy and works even if the TLS setup of math26 fails
 
 ## Services
 

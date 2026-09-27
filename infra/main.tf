@@ -15,7 +15,7 @@ resource "openstack_compute_instance_v2" "math26" {
   name            = "math26"
   image_id        = data.openstack_images_image_v2.trixie.id
   flavor_id       = data.openstack_compute_flavor_v2.math26.id
-  security_groups = ["default", "MathPublicIp"]
+  security_groups = ["default", "MathPublicIp", openstack_networking_secgroup_v2.traefik_dashboard.name]
 
   network {
     uuid = data.openstack_networking_network_v2.dualstack.id
@@ -64,6 +64,28 @@ data "openstack_networking_port_v2" "math26" {
 resource "openstack_networking_floatingip_associate_v2" "public" {
   floating_ip = data.openstack_networking_floatingip_v2.public.address
   port_id     = data.openstack_networking_port_v2.math26.id
+}
+
+# The Traefik dashboard, reachable without the TLS setup of math26.
+resource "cloudvps_web_proxy" "traefik_dashboard" {
+  hostname = "math-traefik-dashboard"
+  backends = ["http://${openstack_compute_instance_v2.math26.access_ip_v4}:8099"]
+}
+
+resource "openstack_networking_secgroup_v2" "traefik_dashboard" {
+  name        = "traefik-dashboard"
+  description = "Traefik dashboard on math26, only for the Cloud VPS web proxy"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "traefik_dashboard" {
+  for_each          = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+  security_group_id = openstack_networking_secgroup_v2.traefik_dashboard.id
+  direction         = "ingress"
+  ethertype         = each.key
+  protocol          = "tcp"
+  port_range_min    = 8099
+  port_range_max    = 8099
+  remote_ip_prefix  = each.value
 }
 
 output "math26_ip" {

@@ -9,6 +9,9 @@ entryPoints:
     address: ":80"
   websecure:
     address: ":443"
+  # Plain HTTP for the Cloud VPS web proxy, see infra/main.tf.
+  dashboard:
+    address: ":8099"
 
 providers:
   docker: {}

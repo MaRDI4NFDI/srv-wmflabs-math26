@@ -9,6 +9,13 @@ http:
         - websecure
       tls:
         certResolver: le
+    api-proxy:
+      rule: PathPrefix(`/`)
+      service: api@internal
+      middlewares:
+        - auth
+      entryPoints:
+        - dashboard
     whoami-80:
       rule: HostRegexp(`{host:.+}`)
       service: whoami-beta@docker
