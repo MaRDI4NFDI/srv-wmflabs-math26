@@ -11,7 +11,7 @@ mkdir -p "$DIR/log"
 cd "$(dirname "$0")"
 
 for dump in "$DIR"/*.xml.bz; do
-	((i = i % DOP)); ((i++ == 0)) && wait -n
+	while (( $(jobs -rp | wc -l) >= DOP )); do wait -n; done
 	name=$(basename "$dump")
 	echo "processing $name"
 	(./createWiki "$dump" &> "$DIR/log/$name.log" || echo "Error importing $name") &

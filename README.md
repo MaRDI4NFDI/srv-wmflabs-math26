@@ -81,7 +81,7 @@ The scripts in `container-scripts/mw` are mounted to `/var/www/html/scripts` in 
 docker exec -it mediawiki-fpm /bin/bash
 cd /var/www/html/scripts
 ./createAllWikis.sh    # one wiki per dump in /data/project/wdump/math, logs in its log/
-./update.sh            # run update.php for every wiki
+./foreachwiki update --quick    # run a maintenance script on every wiki
 ./enableWikidata.sh
 ```
 

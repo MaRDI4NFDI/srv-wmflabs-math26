@@ -1,0 +1,11 @@
+#!/bin/bash
+# Runs a maintenance script on every wiki with a filtered dump, like foreachwiki on Wikimedia.
+# https://wikitech.wikimedia.org/wiki/Maintenance_scripts#Running_on_multiple_wikis_(the_safe_way)
+# Usage: ./foreachwiki <script> [options], e.g. ./foreachwiki update --quick
+DIR=/data/project/wdump/math
+
+for dump in "$DIR"/*.xml.bz; do
+	wiki=$(basename "$dump" .xml.bz)
+	/var/www/html/w/maintenance/run "$@" --wiki "$wiki" 2>&1 | sed -u "s/^/$wiki:  /"
+	[ "${PIPESTATUS[0]}" -eq 0 ] || echo "$wiki:  failed" >&2
+done

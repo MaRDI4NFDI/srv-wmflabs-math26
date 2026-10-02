@@ -193,6 +193,10 @@ if( str_contains( $host, '.wik' ) ) {
 	$wgMathValidModes[] = 'native';
 	wfLoadExtension( 'Scribunto' );
 	$wgScribuntoDefaultEngine = 'luastandalone';
+	if ( $suffix === 'wikisource' ) {
+		// The dumps contain pages with the content model proofread-page
+		wfLoadExtension( 'ProofreadPage' );
+	}
 	if ( $lang === 'meta' ){
 		wfLoadExtension( 'MathSearch' );
 	}
