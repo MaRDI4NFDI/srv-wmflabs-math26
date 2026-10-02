@@ -4,4 +4,5 @@ set -euo pipefail
 wiki=$(basename "$1" | cut -d. -f1)
 echo "Creating $wiki"
 /var/www/html/w/maintenance/run installPreConfigured --wiki "$wiki"
-bzcat "$1" | /var/www/html/w/maintenance/run importDump --wiki "$wiki"
+# Without parsing the pages, the import is about 40 times faster
+bzcat "$1" | /var/www/html/w/maintenance/run importDump --wiki "$wiki" --no-updates

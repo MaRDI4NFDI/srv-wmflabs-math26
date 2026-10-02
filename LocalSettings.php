@@ -197,9 +197,8 @@ if( str_contains( $host, '.wik' ) ) {
 		// The dumps contain pages with the content model proofread-page
 		wfLoadExtension( 'ProofreadPage' );
 	}
-	if ( $lang === 'meta' ){
-		wfLoadExtension( 'MathSearch' );
-	}
+	// UpdateMath of MathSearch fills mathlog after the import
+	wfLoadExtension( 'MathSearch' );
 	// only temp 
         //$wgGroupPermissions['*']['createaccount'] = true; 
 	//require_once "$IP/extensions/Wikibase/repo/Wikibase.php";
