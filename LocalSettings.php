@@ -76,7 +76,8 @@ $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 
 # InstantCommons allows wiki to use images from https://commons.wikimedia.org
-$wgUseInstantCommons = true;
+// Maintenance scripts like UpdateMath parse every page; fetching each image from Commons makes that slow
+$wgUseInstantCommons = PHP_SAPI !== 'cli';
 
 # Periodically send a pingback to https://www.mediawiki.org/ with basic data
 # about this MediaWiki instance. The Wikimedia Foundation shares this data
