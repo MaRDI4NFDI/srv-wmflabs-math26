@@ -194,7 +194,7 @@ if( str_contains( $host, '.wik' ) ) {
 	$wgMathValidModes[] = 'native';
 	wfLoadExtension( 'Scribunto' );
 	$wgScribuntoDefaultEngine = 'luastandalone';
-	if ( $suffix === 'wikisource' ) {
+	if ( $suffix === 'wikisource' || in_array( $wgDBname, [ 'sourceswiki', 'test2wiki' ], true ) ) {
 		// The dumps contain pages with the content model proofread-page
 		wfLoadExtension( 'ProofreadPage' );
 	}

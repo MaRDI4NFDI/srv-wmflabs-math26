@@ -33,7 +33,8 @@ services:
     image: mariadb:lts
     # The default of 128M is far too small to merge the formulae of all wikis.
     # MariaDB does not size it by the available memory yet (MDEV-36197).
-    command: --innodb-buffer-pool-size=6G
+    # The exported JSON files are single values of several hundred MB.
+    command: --innodb-buffer-pool-size=6G --max-allowed-packet=1G
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
