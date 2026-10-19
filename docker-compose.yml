@@ -97,6 +97,18 @@ services:
       WATCHTOWER_CLEANUP: "true"
     labels:
       - "traefik.enable=false"
+  # Renders MathML to SVG on demand, see wmcloud/README.md in wikiFilter.
+  svg-render:
+    image: docker-registry.wikimedia.org/releng/node22-test-browser:22.22.2-s1
+    profiles: [ "svg" ]
+    entrypoint: [ "node" ]
+    working_dir: /work
+    volumes:
+      - ~/wikiFilter/wmcloud/svg:/app
+      - ~/Math:/math:ro
+      - /data/project/wdump/math/svgtest:/work
+    labels:
+      - "traefik.enable=false"
 # Generated on the server by infra/deploy.
 secrets:
   db_root_password:
