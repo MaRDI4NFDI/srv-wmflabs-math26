@@ -13,7 +13,7 @@ http:
       {{- else -}}
         ||
       {{- end -}}
-      Host(`{{$lang}}.{{$siteId}}.beta.math.wmflabs.org`) {{end}}
+      Host(`{{$lang}}.{{$siteId}}.{{ env "MATH_DOMAIN" }}`) {{end}}
       service: mediawiki-beta@docker
       entryPoints:
        - websecure

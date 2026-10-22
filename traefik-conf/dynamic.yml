@@ -1,7 +1,7 @@
 http:
   routers:
     api:
-      rule: Host(`traefik.beta.math.wmflabs.org`)
+      rule: Host(`traefik.{{ env "MATH_DOMAIN" }}`)
       service: api@internal
       middlewares:
         - auth
@@ -25,7 +25,7 @@ http:
         - web
       priority: 100
     whoami-443:
-      rule: Host(`whoami.beta.math.wmflabs.org`)
+      rule: Host(`whoami.{{ env "MATH_DOMAIN" }}`)
       service: whoami-beta@docker
       entryPoints:
        - websecure
@@ -34,7 +34,7 @@ http:
 {{$services := list "mathoid" "whoami"}}
 {{range $s := $services}}
     whoami{{$s}}:
-      rule: Host(`service-{{$s}}.beta.math.wmflabs.org`)
+      rule: Host(`service-{{$s}}.{{ env "MATH_DOMAIN" }}`)
       service: {{$s}}-beta@docker
       entryPoints:
        - websecure
@@ -42,7 +42,7 @@ http:
         certResolver: le
 {{end}}
     home:
-      rule: Host(`home.beta.math.wmflabs.org`)
+      rule: Host(`home.{{ env "MATH_DOMAIN" }}`)
       service: whoami-beta@docker
       entryPoints: [websecure]
       tls:
@@ -58,5 +58,5 @@ http:
         scheme: https
     test-redirectregex:
       redirectRegex:
-        regex: "^https://home.beta.math.wmflabs.org/(.*)"
+        regex: "^https://home.{{ env "MATH_DOMAIN" }}/(.*)"
         replacement: "https://wikitech.wikimedia.org/wiki/Nova_Resource:Math"

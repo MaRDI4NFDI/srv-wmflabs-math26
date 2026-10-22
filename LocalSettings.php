@@ -164,13 +164,15 @@ if ( defined( 'MW_DB' ) ) {
 }
 
 $srv = $_SERVER['SERVER_NAME'] ?? '';
+// Set in docker-compose.yml
+$mathDomain = getenv( 'MATH_DOMAIN' ) ?: 'beta.math.wmflabs.org';
 $host = $_SERVER['HTTP_HOST'] ?? '';
 // Maintenance scripts run with --wiki afwiki get the settings of af.wiki.beta.math.wmflabs.org.
 if ( defined( 'MW_DB' ) && preg_match( '/^([0-9a-z_]+?)(wik[a-z]*)$/', MW_DB, $match ) === 1 ) {
-	$host = str_replace( '_', '-', $match[1] ) . '.' . $match[2] . '.beta.math.wmflabs.org';
+	$host = str_replace( '_', '-', $match[1] ) . '.' . $match[2] . '.' . $mathDomain;
 }
 if( str_contains( $host, '.wik' ) ) {
-	if ( preg_match( '/^([0-9a-z-]+)\.(wik.*?)\.beta\.math\.wmflabs\.org$/', $host, $match ) !== 1 ) {
+	if ( preg_match( '/^([0-9a-z-]+)\.(wik.*?)\.' . preg_quote( $mathDomain, '/' ) . '$/', $host, $match ) !== 1 ) {
 		die( "Server name $host does not match the patterns for wikis." );
 	}
 	$lang = str_replace( '-', '_', $match[1] );
@@ -180,7 +182,7 @@ if( str_contains( $host, '.wik' ) ) {
 	// $wgDBname = 'wiki_' . $match[1];
 	$wikiId = false;
 	$wgDBuser = "wiki";
-	$wgServer = 'https://' . $match[1] . '.' . $match[2] . '.beta.math.wmflabs.org';
+	$wgServer = 'https://' . $match[1] . '.' . $match[2] . '.' . $mathDomain;
 	if ( LanguageCode::isWellFormedLanguageTag( $lang ) ) {
 		$wgLanguageCode = $lang;
 	}

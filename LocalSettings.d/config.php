@@ -1,6 +1,7 @@
 <?php
 $srv = $_SERVER['SERVER_NAME'];
-if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv, $match ) == 1 ) {
+$mathDomain = getenv( 'MATH_DOMAIN' ) ?: 'beta.math.wmflabs.org';
+if ( preg_match( '/([a-z-]+)\.' . preg_quote( $mathDomain, '/' ) . '/', $srv, $match ) == 1 ) {
 	
 	if ( $match[1] === 'mardi' ){
 		$wgLanguageCode = 'en';
@@ -14,7 +15,7 @@ if ( preg_match( '/([a-z-]+)\.beta\.(physikerwelt\.de|math\.wmflabs.org)/', $srv
 	);
 	$wgWBClientSettings['siteLinkGroups'] = [ 'wikipedia', 'drmfgroup' ];
 	$wgWBClientSettings['siteGlobalID'] = $match[1];
-	$wgWBClientSettings['repoUrl'] = 'https://mardi.beta.math.wmflabs.org';
+	$wgWBClientSettings['repoUrl'] = 'https://mardi.' . $mathDomain;
 	$wgWBClientSettings['repoScriptPath'] = '';
 	$wgWBClientSettings['repoArticlePath'] = '/wiki/$1';
 	$wgWBClientSettings['repositories']['']['repoDatabase'] = 'wiki_mardi';

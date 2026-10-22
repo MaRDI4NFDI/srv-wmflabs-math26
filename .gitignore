@@ -2,3 +2,4 @@ letsencrypt
 log.txt
 .idea
 secret
+.env

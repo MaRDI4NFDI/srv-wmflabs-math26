@@ -11,6 +11,9 @@ Serves:
 * `traefik.beta.math.wmflabs.org` and `math-traefik-dashboard.wmcloud.org` – Traefik dashboard (basic auth);
   the second goes through the Cloud VPS web proxy and works even if the TLS setup of math26 fails
 
+`beta.math.wmflabs.org` is the default of `MATH_DOMAIN`, and `/data/project`, the project NFS share, that of `PROJECT_DATA`;
+another server sets its own domain and data directory in `.env`, which is not tracked.
+
 ## Services
 
 | Service | Image |

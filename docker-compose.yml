@@ -1,3 +1,5 @@
+# Traefik refers to services as <service>-beta@docker
+name: beta
 services:
   reverse-proxy:
     image: traefik:v3
@@ -12,6 +14,8 @@ services:
       - "./letsencrypt:/letsencrypt"
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik-conf:/traefik-conf:ro
+    environment:
+      MATH_DOMAIN: ${MATH_DOMAIN:-beta.math.wmflabs.org}
     secrets:
       - traefik_users
     labels:
@@ -24,7 +28,7 @@ services:
     image: docker-registry.wikimedia.org/repos/mediawiki/services/mathoid:latest
     restart: always
     labels:
-      - traefik.http.routers.mathoid-beta.rule=Host(`mathoid.beta.math.wmflabs.org`)
+      - traefik.http.routers.mathoid-beta.rule=Host(`mathoid.${MATH_DOMAIN:-beta.math.wmflabs.org}`)
       - traefik.http.services.mathoid-beta.loadbalancer.server.port=10044
       - traefik.http.routers.mathoid-beta.tls=true
       - traefik.http.routers.mathoid-beta.tls.certresolver=le
@@ -43,7 +47,7 @@ services:
     volumes:
       - mw-database:/var/lib/mysql
       - ./initdb:/docker-entrypoint-initdb.d:ro
-      - /data/project/backup:/backup:ro
+      - ${PROJECT_DATA:-/data/project}/backup:/backup:ro
     secrets:
       - db_root_password
       - db_wiki_password
@@ -64,6 +68,7 @@ services:
       - ./LocalSettings.d:/var/www/html/w/LocalSettings.d:ro
     environment:
       WIKIBASE_HOST: mediawiki-fpm
+      MATH_DOMAIN: ${MATH_DOMAIN:-beta.math.wmflabs.org}
     secrets:
       - db_wiki_password
       - wg_secret_key
@@ -79,9 +84,11 @@ services:
       - ./LocalSettings.php:/var/www/html/w/LocalSettings.php:ro
       - ./LocalSettings.d:/shared/LocalSettings.d:ro
       - ./LocalSettings.d:/var/www/html/w/LocalSettings.d:ro
-      - /data/project/wdump/math-qid:/var/www/html/math-qid:ro
-      - /data/project/wdump/math:/data/project/wdump/math
+      - ${PROJECT_DATA:-/data/project}/wdump/math-qid:/var/www/html/math-qid:ro
+      - ${PROJECT_DATA:-/data/project}/wdump/math:/data/project/wdump/math
       - ./container-scripts/mw:/var/www/html/scripts:ro
+    environment:
+      MATH_DOMAIN: ${MATH_DOMAIN:-beta.math.wmflabs.org}
     secrets:
       - db_wiki_password
       - wg_secret_key
@@ -106,7 +113,7 @@ services:
     volumes:
       - ~/wikiFilter/wmcloud/svg:/app
       - ~/Math:/math:ro
-      - /data/project/wdump/math/svgtest:/work
+      - ${PROJECT_DATA:-/data/project}/wdump/math/svgtest:/work
     labels:
       - "traefik.enable=false"
 # Generated on the server by infra/deploy.
