@@ -54,7 +54,7 @@ services:
     labels:
       - "traefik.enable=false"
   mediawiki:
-    image: ghcr.io/mardi4nfdi/apache-assets:1.47
+    image: ghcr.io/mardi4nfdi/apache-assets:1.48
     restart: always
     container_name: mw
     ports:
@@ -74,7 +74,7 @@ services:
       - wg_secret_key
       - wg_upgrade_key
   mediawiki-fpm:
-    image: ghcr.io/mardi4nfdi/wikibase:1.47
+    image: ghcr.io/mardi4nfdi/wikibase:1.48
     container_name: mediawiki-fpm
     restart: unless-stopped
     volumes:
