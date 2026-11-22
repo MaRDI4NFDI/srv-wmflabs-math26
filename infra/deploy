@@ -31,6 +31,28 @@ tofu plan -input=false -out=math26.tfplan
 read -r -p "Apply this plan? [y/N] " answer
 [ "$answer" = y ] || exit 1
 tofu apply -input=false math26.tfplan
+# The state is committed to this public repository.
+python3 - terraform.tfstate <<'PY' || exit 1
+import json, sys
+state = json.load(open(sys.argv[1]))
+leaks = [name for name, o in state.get("outputs", {}).items() if o.get("sensitive")]
+for r in state["resources"]:
+    for i in r["instances"]:
+        for path in i.get("sensitive_attributes", []):
+            v = i["attributes"]
+            for step in path:
+                try:
+                    v = v[step["value"]]
+                except (KeyError, IndexError, TypeError):
+                    v = None
+            if v not in (None, "", [], {}):
+                leaks.append(f"{r['type']}.{r['name']}: {path[0]['value']}")
+if leaks:
+    sys.exit("terraform.tfstate holds secrets, do not commit it: " + ", ".join(leaks))
+PY
+if ! git diff --quiet HEAD -- terraform.tfstate; then
+	echo "Commit and push infra/terraform.tfstate now, it maps the config to the resources."
+fi
 # A recreated instance has a new host key.
 ssh-keygen -R "$(ssh -G "$HOST" | awk '/^hostname /{print $2}')" >/dev/null 2>&1 || true
 
