@@ -171,6 +171,11 @@ $host = $_SERVER['HTTP_HOST'] ?? '';
 if ( defined( 'MW_DB' ) && preg_match( '/^([0-9a-z_]+?)(wik[a-z]*)$/', MW_DB, $match ) === 1 ) {
 	$host = str_replace( '_', '-', $match[1] ) . '.' . $match[2] . '.' . $mathDomain;
 }
+// Old links like en.beta.math.wmflabs.org/wiki/X now go to en.wiki (T443465).
+if ( preg_match( '/^(en|de)\.' . preg_quote( $mathDomain, '/' ) . '$/', $host, $match ) === 1 ) {
+	header( 'Location: https://' . $match[1] . '.wiki.' . $mathDomain . ( $_SERVER['REQUEST_URI'] ?? '/' ), true, 301 );
+	exit;
+}
 if( str_contains( $host, '.wik' ) ) {
 	if ( preg_match( '/^([0-9a-z-]+)\.(wik.*?)\.' . preg_quote( $mathDomain, '/' ) . '$/', $host, $match ) !== 1 ) {
 		die( "Server name $host does not match the patterns for wikis." );

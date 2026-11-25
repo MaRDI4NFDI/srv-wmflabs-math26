@@ -15,7 +15,7 @@ resource "openstack_compute_instance_v2" "math26" {
   name            = "math26"
   image_id        = data.openstack_images_image_v2.trixie.id
   flavor_id       = data.openstack_compute_flavor_v2.math26.id
-  security_groups = ["default", "MathPublicIp", openstack_networking_secgroup_v2.traefik_dashboard.name, openstack_networking_secgroup_v2.mediawiki.name]
+  security_groups = ["default", "MathPublicIp", openstack_networking_secgroup_v2.mediawiki.name, openstack_networking_secgroup_v2.mathoid.name]
 
   network {
     uuid = data.openstack_networking_network_v2.dualstack.id
@@ -66,38 +66,46 @@ resource "openstack_networking_floatingip_associate_v2" "public" {
   port_id     = data.openstack_networking_port_v2.math26.id
 }
 
-# The Traefik dashboard, reachable without the TLS setup of math26.
-resource "cloudvps_web_proxy" "traefik_dashboard" {
-  hostname = "math-traefik-dashboard"
-  backends = ["http://${openstack_compute_instance_v2.math26.access_ip_v4}:8099"]
-}
-
-resource "openstack_networking_secgroup_v2" "traefik_dashboard" {
-  name        = "traefik-dashboard"
-  description = "Traefik dashboard on math26, only for the Cloud VPS web proxy"
-}
-
-resource "openstack_networking_secgroup_rule_v2" "traefik_dashboard" {
-  for_each          = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
-  security_group_id = openstack_networking_secgroup_v2.traefik_dashboard.id
-  direction         = "ingress"
-  ethertype         = each.key
-  protocol          = "tcp"
-  port_range_min    = 8099
-  port_range_max    = 8099
-  remote_ip_prefix  = each.value
-}
-
 # The wikis, through the shared web proxy (T443465). Wildcards cover one level only,
 # so there is one per site family; WMCS delegated these zones to the project.
 resource "cloudvps_web_proxy" "wikis" {
-  # *.beta.math (mardi) is refused with "Can't use domain" so far; asked on T443465.
   for_each = toset(["wiki.beta.math", "wikibooks.beta.math", "wikimedia.beta.math",
     "wikinews.beta.math", "wikiquote.beta.math", "wikisource.beta.math", "wikiversity.beta.math",
   "wikivoyage.beta.math", "wiktionary.beta.math"])
   hostname = "*"
   domain   = "${each.key}.wmcloud.org"
   backends = ["http://${openstack_compute_instance_v2.math26.access_ip_v4}:8080"]
+}
+
+# Single names below beta.math that MediaWiki serves: en and de are the old names of
+# en.wiki and de.wiki, which MediaWiki redirects; mardi is the central Wikibase.
+resource "cloudvps_web_proxy" "mediawiki" {
+  for_each = toset(["en", "de", "mardi"])
+  hostname = each.key
+  domain   = "beta.math.wmcloud.org"
+  backends = ["http://${openstack_compute_instance_v2.math26.access_ip_v4}:8080"]
+}
+
+resource "cloudvps_web_proxy" "mathoid" {
+  hostname = "mathoid"
+  domain   = "beta.math.wmcloud.org"
+  backends = ["http://${openstack_compute_instance_v2.math26.access_ip_v4}:10044"]
+}
+
+resource "openstack_networking_secgroup_v2" "mathoid" {
+  name        = "mathoid"
+  description = "Mathoid on math26, only for the Cloud VPS web proxy"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "mathoid" {
+  for_each          = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+  security_group_id = openstack_networking_secgroup_v2.mathoid.id
+  direction         = "ingress"
+  ethertype         = each.key
+  protocol          = "tcp"
+  port_range_min    = 10044
+  port_range_max    = 10044
+  remote_ip_prefix  = each.value
 }
 
 resource "openstack_networking_secgroup_v2" "mediawiki" {

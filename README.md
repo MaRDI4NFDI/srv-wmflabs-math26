@@ -7,11 +7,11 @@ It runs on the instance math26, which `infra/deploy` creates.
 Serves, through the Cloud VPS web proxy:
 * `<lang>.<site>.beta.math.wmcloud.org` – one MediaWiki per imported Wikimedia dump
 * `mardi.beta.math.wmcloud.org` – Wikibase repository for the wikis above
-* `math-traefik-dashboard.wmcloud.org` – Traefik dashboard (basic auth)
+* `mathoid.beta.math.wmcloud.org`
+* `en.beta.math.wmcloud.org` and `de.beta.math.wmcloud.org` – old names, redirected to `en.wiki` and `de.wiki`
 
-The proxy has one-level wildcards for `*.beta.math.wmcloud.org` and `*.<site>.beta.math.wmcloud.org`
-(see `infra/main.tf`) and sends them to MediaWiki on port 8080; the old `beta.math.wmflabs.org` names are to redirect there.
-It also handles TLS, so Traefik's own routes and certificates are only used on the floating IP.
+The proxy has a one-level wildcard `*.<site>.beta.math.wmcloud.org` per site family and single names below `beta.math`
+(see `infra/main.tf`); it redirects the old `beta.math.wmflabs.org` names there and handles TLS.
 
 `beta.math.wmflabs.org` is the default of `MATH_DOMAIN`, and `/data/project`, the project NFS share, that of `PROJECT_DATA`;
 another server sets its own domain and data directory in `.env`, which is not tracked.
@@ -21,7 +21,6 @@ On math26, `infra/deploy` sets `MATH_DOMAIN=beta.math.wmcloud.org` there.
 
 | Service | Image |
 |---------|-------|
-| `reverse-proxy` | traefik, TLS via Let's Encrypt |
 | `mathoid` | docker-registry.wikimedia.org/repos/mediawiki/services/mathoid |
 | `database` (`db`) | mariadb |
 | `mediawiki` (`mw`) | ghcr.io/mardi4nfdi/apache-assets |
@@ -36,7 +35,6 @@ The filtered dumps are expected in `/data/project/wdump/math`.
 Secrets are not part of this repository.
 `infra/deploy` generates them in `/srv/srv-wmflabs-math26/secret` on the server,
 and the containers read them from `/run/secrets`.
-The Traefik dashboard user is `math`; its password is in `secret/traefik_dashboard_password`.
 
 ## Setup
 

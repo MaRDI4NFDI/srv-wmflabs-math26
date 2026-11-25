@@ -83,7 +83,7 @@ if ! mountpoint -q /srv; then
 	/usr/local/sbin/wmcs-prepare-cinder-volume --device "$dev" --mountpoint /srv --force --allow-unattended-format
 	systemctl start docker
 fi
-apt-get install -y docker-compose apache2-utils
+apt-get install -y docker-compose
 if [ -d "$DIR/.git" ]; then
 	git -C "$DIR" pull --ff-only
 else
@@ -93,10 +93,9 @@ cd "$DIR"
 # The directory keeps other users out; the files stay readable for the container users.
 install -d -m 700 secret
 umask 022
-for name in db_root_password.txt db_wiki_password wg_secret_key wg_upgrade_key wiki_admin_password traefik_dashboard_password; do
+for name in db_root_password.txt db_wiki_password wg_secret_key wg_upgrade_key wiki_admin_password; do
 	[ -f "secret/$name" ] || openssl rand -hex 32 > "secret/$name"
 done
-[ -f secret/traefik_users ] || htpasswd -nbB math "$(cat secret/traefik_dashboard_password)" > secret/traefik_users
 chmod 644 secret/*
 # The wikis are served through the shared web proxy on wmcloud.org (T443465).
 touch .env
@@ -110,5 +109,6 @@ if [ -z "$(ls -A "$dumps" 2>/dev/null)" ]; then
 	echo "Check nfs-exportd on math-nfs-2, then run puppet on math26."
 	exit 1
 fi
-docker-compose up -d
+# Removes the containers of services that are gone, e.g. Traefik.
+docker-compose up -d --remove-orphans
 EOF
