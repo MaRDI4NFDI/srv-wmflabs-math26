@@ -111,4 +111,6 @@ if [ -z "$(ls -A "$dumps" 2>/dev/null)" ]; then
 fi
 # Removes the containers of services that are gone, e.g. Traefik.
 docker-compose up -d --remove-orphans
+# The containers keep a mounted file that git replaced, e.g. LocalSettings.php, until they restart.
+docker-compose restart mediawiki mediawiki-fpm
 EOF
