@@ -4,15 +4,18 @@ Docker Compose setup for the math server in the WMCloud project
 [Math](https://wikitech.wikimedia.org/wiki/Nova_Resource:Math).
 It runs on the instance math26, which `infra/deploy` creates.
 
-Serves:
-* `<lang>.<site>.beta.math.wmflabs.org` – one MediaWiki per imported Wikimedia dump
-* `mardi.beta.math.wmflabs.org` – Wikibase repository for the wikis above
-* `mathoid.beta.math.wmflabs.org`
-* `traefik.beta.math.wmflabs.org` and `math-traefik-dashboard.wmcloud.org` – Traefik dashboard (basic auth);
-  the second goes through the Cloud VPS web proxy and works even if the TLS setup of math26 fails
+Serves, through the Cloud VPS web proxy:
+* `<lang>.<site>.beta.math.wmcloud.org` – one MediaWiki per imported Wikimedia dump
+* `mardi.beta.math.wmcloud.org` – Wikibase repository for the wikis above
+* `math-traefik-dashboard.wmcloud.org` – Traefik dashboard (basic auth)
+
+The proxy has one-level wildcards for `*.beta.math.wmcloud.org` and `*.<site>.beta.math.wmcloud.org`
+(see `infra/main.tf`) and sends them to MediaWiki on port 8080; the old `beta.math.wmflabs.org` names are to redirect there.
+It also handles TLS, so Traefik's own routes and certificates are only used on the floating IP.
 
 `beta.math.wmflabs.org` is the default of `MATH_DOMAIN`, and `/data/project`, the project NFS share, that of `PROJECT_DATA`;
 another server sets its own domain and data directory in `.env`, which is not tracked.
+On math26, `infra/deploy` sets `MATH_DOMAIN=beta.math.wmcloud.org` there.
 
 ## Services
 

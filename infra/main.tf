@@ -15,7 +15,7 @@ resource "openstack_compute_instance_v2" "math26" {
   name            = "math26"
   image_id        = data.openstack_images_image_v2.trixie.id
   flavor_id       = data.openstack_compute_flavor_v2.math26.id
-  security_groups = ["default", "MathPublicIp", openstack_networking_secgroup_v2.traefik_dashboard.name]
+  security_groups = ["default", "MathPublicIp", openstack_networking_secgroup_v2.traefik_dashboard.name, openstack_networking_secgroup_v2.mediawiki.name]
 
   network {
     uuid = data.openstack_networking_network_v2.dualstack.id
@@ -85,6 +85,33 @@ resource "openstack_networking_secgroup_rule_v2" "traefik_dashboard" {
   protocol          = "tcp"
   port_range_min    = 8099
   port_range_max    = 8099
+  remote_ip_prefix  = each.value
+}
+
+# The wikis, through the shared web proxy (T443465). Wildcards cover one level only,
+# so there is one per site family; WMCS delegated these zones to the project.
+resource "cloudvps_web_proxy" "wikis" {
+  for_each = toset(["beta.math", "wiki.beta.math", "wikibooks.beta.math", "wikimedia.beta.math",
+    "wikinews.beta.math", "wikiquote.beta.math", "wikisource.beta.math", "wikiversity.beta.math",
+  "wikivoyage.beta.math", "wiktionary.beta.math"])
+  hostname = "*"
+  domain   = "${each.key}.wmcloud.org"
+  backends = ["http://${openstack_compute_instance_v2.math26.access_ip_v4}:8080"]
+}
+
+resource "openstack_networking_secgroup_v2" "mediawiki" {
+  name        = "mediawiki"
+  description = "MediaWiki on math26, only for the Cloud VPS web proxy"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "mediawiki" {
+  for_each          = { IPv4 = "172.16.0.0/17", IPv6 = "2a02:ec80:a000::/56" }
+  security_group_id = openstack_networking_secgroup_v2.mediawiki.id
+  direction         = "ingress"
+  ethertype         = each.key
+  protocol          = "tcp"
+  port_range_min    = 8080
+  port_range_max    = 8080
   remote_ip_prefix  = each.value
 }
 

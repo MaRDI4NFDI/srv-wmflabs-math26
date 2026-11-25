@@ -98,6 +98,10 @@ for name in db_root_password.txt db_wiki_password wg_secret_key wg_upgrade_key w
 done
 [ -f secret/traefik_users ] || htpasswd -nbB math "$(cat secret/traefik_dashboard_password)" > secret/traefik_users
 chmod 644 secret/*
+# The wikis are served through the shared web proxy on wmcloud.org (T443465).
+touch .env
+sed -i '/^MATH_DOMAIN=/d' .env
+echo MATH_DOMAIN=beta.math.wmcloud.org >> .env
 # Without the NFS mount the wikis would start without their dumps.
 data=$(sed -n 's/^PROJECT_DATA=//p' .env 2>/dev/null | tail -n 1 || true)
 dumps=${data:-/data/project}/wdump/math
