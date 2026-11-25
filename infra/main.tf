@@ -91,7 +91,8 @@ resource "openstack_networking_secgroup_rule_v2" "traefik_dashboard" {
 # The wikis, through the shared web proxy (T443465). Wildcards cover one level only,
 # so there is one per site family; WMCS delegated these zones to the project.
 resource "cloudvps_web_proxy" "wikis" {
-  for_each = toset(["beta.math", "wiki.beta.math", "wikibooks.beta.math", "wikimedia.beta.math",
+  # *.beta.math (mardi) is refused with "Can't use domain" so far; asked on T443465.
+  for_each = toset(["wiki.beta.math", "wikibooks.beta.math", "wikimedia.beta.math",
     "wikinews.beta.math", "wikiquote.beta.math", "wikisource.beta.math", "wikiversity.beta.math",
   "wikivoyage.beta.math", "wiktionary.beta.math"])
   hostname = "*"
